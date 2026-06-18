@@ -291,7 +291,7 @@ export function HomePageClient({
                   loading="eager"
                   priority
                   fetchPriority="high"
-                  quality={65}
+                  quality={75}
                   sizes="(max-width: 640px) 224px, (max-width: 768px) 320px, 384px"
                   className="block h-full w-full object-cover"
                 />
