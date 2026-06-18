@@ -6,22 +6,19 @@ const privacyPolicyOgImageUrl = `${siteUrl}/privacy-policy/opengraph-image`;
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description:
-    "Privacy Policy for muhammadfiaz.com services and communications.",
+  description: "Privacy Policy for this website's services and communications.",
   alternates: { canonical: "/privacy-policy" },
   openGraph: {
-    title: "Privacy Policy | Muhammad Fiaz",
-    description:
-      "How data is collected, used, and protected on muhammadfiaz.com.",
+    title: "Privacy Policy | Daniel Salas",
+    description: "How data is collected, used, and protected on this website.",
     url: `${siteUrl}/privacy-policy`,
     type: "website",
     images: [privacyPolicyOgImageUrl],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Privacy Policy | Muhammad Fiaz",
-    description:
-      "How data is collected, used, and protected on muhammadfiaz.com.",
+    title: "Privacy Policy | Daniel Salas",
+    description: "How data is collected, used, and protected on this website.",
     images: [privacyPolicyOgImageUrl],
   },
 };
@@ -30,7 +27,7 @@ export default function PrivacyPolicyPage() {
   return (
     <PolicyPageClient
       pageTitle="Privacy Policy"
-      intro="This Privacy Policy explains how Muhammad Fiaz collects, uses, and protects information when you use muhammadfiaz.com and related services."
+      intro="This Privacy Policy explains how Daniel Salas collects, uses, and protects information when you use this website and related services."
       sections={[
         {
           title: "Information Collected",
@@ -72,7 +69,7 @@ export default function PrivacyPolicyPage() {
           title: "Your Rights and Contact",
           content: [
             "You may request correction or deletion of your personal information where legally applicable.",
-            "For privacy questions, contact: contact@muhammadfiaz.com.",
+            "For privacy questions, contact: danielhachac@gmail.com.",
           ],
         },
       ]}

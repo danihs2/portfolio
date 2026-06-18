@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "open source writing",
   ],
   openGraph: {
-    title: "Blog by Muhammad Fiaz",
+    title: "Blog by Daniel Salas",
     description:
       "Engineering, product, and open-source articles aggregated from multiple platforms.",
     url: `${siteUrl}/blog`,
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
         url: blogOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "Muhammad Fiaz Blog",
+        alt: "Daniel Salas Blog",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog by Muhammad Fiaz",
+    title: "Blog by Daniel Salas",
     description:
       "Engineering, product, and open-source articles aggregated from multiple platforms.",
     images: [blogOgImageUrl],
@@ -77,12 +77,12 @@ export default async function BlogPage() {
           datePublished: post.publishedAt,
           author: {
             "@type": "Person",
-            name: "Muhammad Fiaz",
+            name: "Daniel Salas",
             url: siteUrl,
           },
           publisher: {
             "@type": "Person",
-            name: "Muhammad Fiaz",
+            name: "Daniel Salas",
             url: siteUrl,
           },
           keywords: post.tags.join(", "),

@@ -9,7 +9,7 @@ const memoryDb = {
 };
 
 export const auth = betterAuth({
-  appName: "Muhammad Fiaz Portfolio",
+  appName: "Daniel Salas Portfolio",
   secret:
     process.env.BETTER_AUTH_SECRET ??
     process.env.NEXTAUTH_SECRET ??

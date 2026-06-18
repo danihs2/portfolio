@@ -1,13 +1,13 @@
 import { buildTwitterImage, ogContentType, ogSize } from "@/lib/og-image";
 
-export const alt = "Contact Muhammad Fiaz";
+export const alt = "Contact Daniel Salas";
 export const size = ogSize;
 export const contentType = ogContentType;
 
 export default function Image() {
   return buildTwitterImage({
     eyebrow: "Contact",
-    title: "Muhammad Fiaz",
+    title: "Daniel Salas",
     subtitle: "Projects | Consulting | Collaboration",
     accent: "primary",
   });

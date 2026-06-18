@@ -7,7 +7,7 @@ const aboutOgImageUrl = `${siteUrl}/about/opengraph-image`;
 
 export const metadata: Metadata = {
   title: "About",
-  description: "The journey, roles, and milestones of Muhammad Fiaz.",
+  description: "The journey, roles, and milestones of Daniel Salas.",
   alternates: {
     canonical: "/about",
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "full stack experience",
   ],
   openGraph: {
-    title: "About Muhammad Fiaz",
+    title: "About Daniel Salas",
     description:
       "Journey, milestones, and experience across full stack, open source, and AI delivery.",
     url: `${siteUrl}/about`,
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
         url: aboutOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "About Muhammad Fiaz",
+        alt: "About Daniel Salas",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Muhammad Fiaz",
+    title: "About Daniel Salas",
     description:
       "Journey, milestones, and experience across full stack, open source, and AI delivery.",
     images: [aboutOgImageUrl],
@@ -78,7 +78,7 @@ function formatPeriod(start: string, end: string): string {
 const timelineItems: TimelineItem[] = [
   {
     period: formatPeriod("Sep 2025", "Present"),
-    title: "Founder (Fiaz Technologies · Full-time)",
+    title: "Founder (Independent · Full-time)",
     url: fiazDevUrl,
     description:
       "Building developer-first tools, software solutions, and AI workflows for founders, startups, and growing businesses as a full-time founder.",
@@ -177,11 +177,11 @@ export default function AboutPage() {
   const aboutJsonLd = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    name: "About Muhammad Fiaz",
+    name: "About Daniel Salas",
     url: `${siteUrl}/about`,
     mainEntity: {
       "@type": "Person",
-      name: "Muhammad Fiaz",
+      name: "Daniel Salas",
       url: siteUrl,
       jobTitle: "Founder, Entrepreneur, Full Stack Developer",
     },

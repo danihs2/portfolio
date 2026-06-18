@@ -6,10 +6,10 @@ const deliveryPolicyOgImageUrl = `${siteUrl}/delivery-policy/opengraph-image`;
 
 export const metadata: Metadata = {
   title: "Delivery Policy",
-  description: "Delivery standards and channels for services by Muhammad Fiaz.",
+  description: "Delivery standards and channels for services by Daniel Salas.",
   alternates: { canonical: "/delivery-policy" },
   openGraph: {
-    title: "Delivery Policy | Muhammad Fiaz",
+    title: "Delivery Policy | Daniel Salas",
     description: "How services and deliverables are provided and handed over.",
     url: `${siteUrl}/delivery-policy`,
     type: "website",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Delivery Policy | Muhammad Fiaz",
+    title: "Delivery Policy | Daniel Salas",
     description: "How services and deliverables are provided and handed over.",
     images: [deliveryPolicyOgImageUrl],
   },
@@ -27,7 +27,7 @@ export default function DeliveryPolicyPage() {
   return (
     <PolicyPageClient
       pageTitle="Delivery Policy"
-      intro="This Delivery Policy describes how services and project deliverables are provided by Muhammad Fiaz through remote-first workflows."
+      intro="This Delivery Policy describes how services and project deliverables are provided by Daniel Salas through remote-first workflows."
       sections={[
         {
           title: "Delivery Mode",

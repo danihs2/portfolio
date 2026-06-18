@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://muhammadfiaz.com";
+const DEFAULT_SITE_URL = "http://localhost:3000";
 
 function normalizeSiteUrl(rawUrl: string): string {
   const normalized = rawUrl.startsWith("http") ? rawUrl : `https://${rawUrl}`;
@@ -20,18 +20,23 @@ export const siteUrl = normalizeSiteUrl(
 
 export const siteHost = new URL(`${siteUrl}/`).host;
 
-export const fiazDevUrl = "https://fiaztechnologies.github.io";
-export const linkHubUrl = "https://links.muhammadfiaz.com";
-export const githubUrl = "https://github.com/muhammad-fiaz";
+export const contactEmail = "danielhachac@gmail.com";
+export const contactMailtoUrl = `mailto:${contactEmail}`;
+export const fiazDevUrl = process.env.NEXT_PUBLIC_COMPANY_URL ?? siteUrl;
+export const linkHubUrl = process.env.NEXT_PUBLIC_LINK_HUB_URL ?? siteUrl;
+export const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL ?? siteUrl;
 export const githubSnakeGraphUrl =
-  "https://raw.githubusercontent.com/muhammad-fiaz/muhammad-fiaz/output/github-contribution-grid-snake.svg";
-export const linkedinUrl = "https://www.linkedin.com/in/muhammad-fiaz-";
-export const xUrl = "https://x.com/muhammadfiaz_";
-export const youtubeUrl = "https://www.youtube.com/@muhammad_fiaz";
+  process.env.NEXT_PUBLIC_GITHUB_SNAKE_GRAPH_URL ?? "";
+export const linkedinUrl =
+  process.env.NEXT_PUBLIC_LINKEDIN_URL ?? contactMailtoUrl;
+export const xUrl = process.env.NEXT_PUBLIC_X_URL ?? siteUrl;
+export const youtubeUrl = process.env.NEXT_PUBLIC_YOUTUBE_URL ?? siteUrl;
 export const hackatimeUrl =
   process.env.NEXT_PUBLIC_CODING_STATS_PROVIDER === "hackatime"
     ? "https://heatmap.shymike.dev/?id=30609&timezone=UTC"
-    : "https://wakatime.com/@muhammadfiaz";
-export const sponsorUrl = "https://github.com/sponsors/muhammad-fiaz/";
-export const donationUrl = "https://pay.muhammadfiaz.com/";
+    : (process.env.NEXT_PUBLIC_WAKATIME_URL ?? siteUrl);
+export const sponsorUrl =
+  process.env.NEXT_PUBLIC_SPONSOR_URL ?? contactMailtoUrl;
+export const donationUrl =
+  process.env.NEXT_PUBLIC_DONATION_URL ?? contactMailtoUrl;
 export const ogImageUrl = `${siteUrl}/opengraph-image`;

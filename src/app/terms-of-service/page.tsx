@@ -6,10 +6,10 @@ const termsOgImageUrl = `${siteUrl}/terms-of-service/opengraph-image`;
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Professional Terms of Service for services by Muhammad Fiaz.",
+  description: "Professional Terms of Service for services by Daniel Salas.",
   alternates: { canonical: "/terms-of-service" },
   openGraph: {
-    title: "Terms of Service | Muhammad Fiaz",
+    title: "Terms of Service | Daniel Salas",
     description:
       "Service terms, client obligations, delivery standards, and legal conditions.",
     url: `${siteUrl}/terms-of-service`,
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms of Service | Muhammad Fiaz",
+    title: "Terms of Service | Daniel Salas",
     description:
       "Service terms, client obligations, delivery standards, and legal conditions.",
     images: [termsOgImageUrl],
@@ -29,7 +29,7 @@ export default function TermsOfServicePage() {
   return (
     <PolicyPageClient
       pageTitle="Terms of Service"
-      intro="These Terms of Service govern access to muhammadfiaz.com and all consulting, engineering, automation, and product delivery services provided by Muhammad Fiaz."
+      intro="These Terms of Service govern access to this website and all consulting, engineering, automation, and product delivery services provided by Daniel Salas."
       sections={[
         {
           title: "Service Scope",
@@ -83,7 +83,7 @@ export default function TermsOfServicePage() {
         {
           title: "Contact and Governing Terms",
           content: [
-            "Questions regarding these terms can be sent to contact@muhammadfiaz.com.",
+            "Questions regarding these terms can be sent to danielhachac@gmail.com.",
             "These terms are interpreted under applicable laws and may be updated periodically to reflect service and legal changes.",
             "Continued use of this website or services after updates constitutes acceptance of revised terms.",
           ],

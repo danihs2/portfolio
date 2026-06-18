@@ -1,3 +1,13 @@
+import {
+  contactMailtoUrl,
+  fiazDevUrl,
+  githubUrl,
+  linkedinUrl,
+  siteUrl,
+  xUrl,
+  youtubeUrl,
+} from "@/lib/site-config";
+
 export interface LinkItem {
   href: string;
   name: string;
@@ -6,12 +16,12 @@ export interface LinkItem {
 
 export const links: LinkItem[] = [
   {
-    href: "https://github.com/muhammad-fiaz",
+    href: githubUrl,
     name: "GitHub",
     description: "Open source projects and contributions",
   },
   {
-    href: "https://www.linkedin.com/in/muhammad-fiaz-",
+    href: linkedinUrl,
     name: "LinkedIn",
     description: "Connect with me professionally",
   },
@@ -19,7 +29,7 @@ export const links: LinkItem[] = [
     href:
       process.env.NEXT_PUBLIC_CODING_STATS_PROVIDER === "hackatime"
         ? "https://heatmap.shymike.dev/?id=30609&timezone=UTC"
-        : "https://wakatime.com/@muhammadfiaz",
+        : (process.env.NEXT_PUBLIC_WAKATIME_URL ?? siteUrl),
     name:
       process.env.NEXT_PUBLIC_CODING_STATS_PROVIDER === "hackatime"
         ? "Hackatime Activity"
@@ -27,27 +37,27 @@ export const links: LinkItem[] = [
     description: "Check my coding activity",
   },
   {
-    href: "https://muhammadfiaz.com",
+    href: siteUrl,
     name: "Portfolio",
     description: "Visit my main website",
   },
   {
-    href: "https://x.com/muhammadfiaz_",
+    href: xUrl,
     name: "X (Twitter)",
     description: "Follow me for updates",
   },
   {
-    href: "https://www.youtube.com/@muhammad_fiaz",
+    href: youtubeUrl,
     name: "YouTube",
     description: "Subscribe to my channel for tech content",
   },
   {
-    href: "https://dribbble.com/muhammadfiaz",
+    href: process.env.NEXT_PUBLIC_DRIBBBLE_URL ?? siteUrl,
     name: "Dribbble",
     description: "My design work and shots",
   },
   {
-    href: "mailto:contact@muhammadfiaz.com",
+    href: contactMailtoUrl,
     name: "Contact Me",
     description: "Get in touch via email",
   },
@@ -62,13 +72,13 @@ export const links: LinkItem[] = [
     description: "AI tools, resources, and developer updates",
   },
   {
-    href: "https://app.daily.dev/muhammadfiaz",
+    href: process.env.NEXT_PUBLIC_DAILY_DEV_URL ?? siteUrl,
     name: "daily.dev Profile",
     description: "My daily.dev developer profile",
   },
   {
-    href: "https://fiaztechnologies.github.io",
-    name: "Fiaz Technologies",
+    href: fiazDevUrl,
+    name: "Business",
     description: "Developer-first next-generation solutions",
   },
 ];

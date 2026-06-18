@@ -9,7 +9,7 @@ const notFoundOgImageUrl = `${siteUrl}/404/opengraph-image`;
 export const metadata: Metadata = {
   title: "404 | Route Not Found",
   description:
-    "The requested route was not found. Continue browsing Muhammad Fiaz Portfolio v5.",
+    "The requested route was not found. Continue browsing Daniel Salas Portfolio v5.",
   alternates: {
     canonical: "/404",
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: "404 | Muhammad Fiaz Portfolio",
+    title: "404 | Daniel Salas Portfolio",
     description:
       "The requested route is not available in this release. Use retro navigation to continue.",
     url: `${siteUrl}/404`,
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
         url: notFoundOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "404 page for Muhammad Fiaz Portfolio v5",
+        alt: "404 page for Daniel Salas Portfolio v5",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "404 | Muhammad Fiaz Portfolio",
+    title: "404 | Daniel Salas Portfolio",
     description:
       "The requested route is not available in this release. Use retro navigation to continue.",
     images: [notFoundOgImageUrl],
@@ -53,10 +53,10 @@ export default function NotFoundPage() {
     url: `${siteUrl}/404`,
     isPartOf: {
       "@type": "WebSite",
-      name: "Muhammad Fiaz Portfolio",
+      name: "Daniel Salas Portfolio",
       url: siteUrl,
     },
-    description: "Custom route-not-found page for Muhammad Fiaz Portfolio v5.",
+    description: "Custom route-not-found page for Daniel Salas Portfolio v5.",
   };
 
   return (

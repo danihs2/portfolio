@@ -7,7 +7,7 @@ const contactOgImageUrl = `${siteUrl}/contact/opengraph-image`;
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact Muhammad Fiaz for projects, consulting, and collaborations.",
+    "Contact Daniel Salas for projects, consulting, and collaborations.",
   alternates: {
     canonical: "/contact",
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "software consulting",
   ],
   openGraph: {
-    title: "Contact Muhammad Fiaz",
+    title: "Contact Daniel Salas",
     description:
       "Send project goals and timelines for software execution, consulting, and delivery.",
     url: `${siteUrl}/contact`,
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
         url: contactOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "Contact Muhammad Fiaz",
+        alt: "Contact Daniel Salas",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact Muhammad Fiaz",
+    title: "Contact Daniel Salas",
     description:
       "Send project goals and timelines for software execution, consulting, and delivery.",
     images: [contactOgImageUrl],
@@ -49,7 +49,7 @@ export default function ContactPage() {
   const contactJsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contact Muhammad Fiaz",
+    name: "Contact Daniel Salas",
     url: `${siteUrl}/contact`,
     description:
       "Contact page for project collaboration and software services.",

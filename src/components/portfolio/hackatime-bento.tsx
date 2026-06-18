@@ -9,6 +9,7 @@ import { Button } from "@/components/retroui/Button";
 import { BarChart } from "@/components/retroui/charts/BarChart";
 import { PieChart } from "@/components/retroui/charts/PieChart";
 import type { HackatimePayload } from "@/lib/portfolio-types";
+import { hackatimeUrl } from "@/lib/site-config";
 
 function splitNumericText(input: string) {
   const match = input.match(/[\d,.]+/);
@@ -36,9 +37,7 @@ export function HackatimeBento({ stats }: { stats: HackatimePayload | null }) {
   const isWakatime =
     process.env.NEXT_PUBLIC_CODING_STATS_PROVIDER !== "hackatime";
   const providerName = isWakatime ? "Wakatime" : "Hackatime";
-  const providerLink = isWakatime
-    ? "https://wakatime.com/@muhammadfiaz"
-    : "https://hackatime.hackclub.com/@muhammadfiaz";
+  const providerLink = hackatimeUrl;
 
   if (!stats) {
     return (
@@ -200,7 +199,7 @@ export function HackatimeBento({ stats }: { stats: HackatimePayload | null }) {
           >
             <Image
               src="https://heatmap.shymike.dev/?id=30609&timezone=UTC"
-              alt="Muhammad Fiaz Hack Club streak heatmap"
+              alt="Daniel Salas Hack Club streak heatmap"
               width={1200}
               height={260}
               className="h-auto w-full border-2 border-black bg-card"

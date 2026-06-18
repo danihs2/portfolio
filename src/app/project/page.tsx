@@ -8,7 +8,7 @@ const projectOgImageUrl = `${siteUrl}/project/opengraph-image`;
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "SSR-fetched GitHub projects by Muhammad Fiaz with filtering and search.",
+    "SSR-fetched GitHub projects by Daniel Salas with filtering and search.",
   alternates: {
     canonical: "/project",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "startup product builds",
   ],
   openGraph: {
-    title: "Projects by Muhammad Fiaz",
+    title: "Projects by Daniel Salas",
     description:
       "Explore top-starred and recently updated projects with filters and search.",
     url: `${siteUrl}/project`,
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
         url: projectOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "Muhammad Fiaz Projects",
+        alt: "Daniel Salas Projects",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Projects by Muhammad Fiaz",
+    title: "Projects by Daniel Salas",
     description:
       "Explore top-starred and recently updated projects with filters and search.",
     images: [projectOgImageUrl],
@@ -60,7 +60,7 @@ export default async function ProjectPage() {
   const projectsJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Projects by Muhammad Fiaz",
+    name: "Projects by Daniel Salas",
     url: `${siteUrl}/project`,
     description: "GitHub repositories and product engineering work.",
     mainEntity: {
@@ -77,12 +77,12 @@ export default async function ProjectPage() {
           programmingLanguage: repo.language ?? "Mixed",
           author: {
             "@type": "Person",
-            name: "Muhammad Fiaz",
+            name: "Daniel Salas",
             url: siteUrl,
           },
           publisher: {
             "@type": "Person",
-            name: "Muhammad Fiaz",
+            name: "Daniel Salas",
             url: siteUrl,
           },
           keywords: (repo.topics ?? []).join(", "),

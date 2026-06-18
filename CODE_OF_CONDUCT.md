@@ -32,7 +32,7 @@ This Code of Conduct applies in all project spaces and public spaces when indivi
 
 To report violations, contact:
 
-- contact@muhammadfiaz.com
+- danielhachac@gmail.com
 
 Reports will be reviewed promptly and handled confidentially where possible.
 

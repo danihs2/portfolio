@@ -122,9 +122,9 @@ async function safeJsonParse<T>(response: Response): Promise<T | null> {
 const DEFAULT_GITHUB_USER =
   process.env.GITHUB_USER ??
   process.env.NEXT_PUBLIC_GITHUB_USER ??
-  "muhammad-fiaz";
-const DEVTO_USER = "muhammadfiaz";
-const HASHNODE_HOST = "muhammadfiaz.hashnode.dev";
+  "danielhachac";
+const DEVTO_USER = process.env.DEVTO_USER ?? "danielhachac";
+const HASHNODE_HOST = process.env.HASHNODE_HOST ?? "";
 const GITHUB_CACHE_REVALIDATE_SECONDS = 60 * 60 * 12;
 
 async function getCurrentTimestamp() {
@@ -440,6 +440,10 @@ export async function getGithubOverview(
 }
 
 async function fetchHashnodePosts(): Promise<BlogPost[]> {
+  if (!HASHNODE_HOST) {
+    return [];
+  }
+
   const query = `
     query PublicationPosts($host: String!) {
       publication(host: $host) {

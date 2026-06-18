@@ -158,16 +158,22 @@ export function GithubOverviewBento({
             Contribution snake graph, live from GitHub profile output.
           </p>
           <div className="mt-4 overflow-hidden border-4 border-black bg-muted p-2 shadow-retro-sm sm:p-3">
-            <Image
-              src={githubSnakeGraphUrl}
-              alt="Muhammad Fiaz GitHub contribution snake graph"
-              width={1200}
-              height={260}
-              className="h-auto w-full border-2 border-black bg-card"
-              priority={false}
-              loading="lazy"
-              unoptimized
-            />
+            {githubSnakeGraphUrl ? (
+              <Image
+                src={githubSnakeGraphUrl}
+                alt="Daniel Salas GitHub contribution snake graph"
+                width={1200}
+                height={260}
+                className="h-auto w-full border-2 border-black bg-card"
+                priority={false}
+                loading="lazy"
+                unoptimized
+              />
+            ) : (
+              <div className="flex min-h-40 items-center justify-center border-2 border-black bg-card p-4 text-center font-black uppercase text-muted-foreground">
+                GitHub contribution graph is not configured.
+              </div>
+            )}
           </div>
           <Button
             asChild

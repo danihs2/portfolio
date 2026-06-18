@@ -41,7 +41,7 @@ export function SignInButton({ className = "" }: { className?: string }) {
 
   if (user) {
     const initialsSource =
-      user.name?.trim() || user.email?.trim() || "Muhammad Fiaz";
+      user.name?.trim() || user.email?.trim() || "Daniel Salas";
     const initials = initialsSource
       .split(/\s+/)
       .filter(Boolean)

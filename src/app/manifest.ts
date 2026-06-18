@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Muhammad Fiaz Portfolio",
-    short_name: "Muhammad Fiaz",
+    name: "Daniel Salas Portfolio",
+    short_name: "Daniel Salas",
     description:
       "Founder, Entrepreneur, Full Stack Developer, Freelancer and Full-Time Open-Sourcerer.",
     start_url: "/",

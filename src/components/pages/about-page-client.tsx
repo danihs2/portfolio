@@ -66,7 +66,7 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
             <div className="border-4 border-black bg-card p-0">
               <Image
                 src="https://avatars.githubusercontent.com/u/75434191?v=4"
-                alt="Muhammad Fiaz"
+                alt="Daniel Salas"
                 width={420}
                 height={420}
                 className="block h-full w-full object-cover"
@@ -118,7 +118,7 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
             </h1>
             <div className="mt-5 space-y-4 text-sm font-medium leading-relaxed sm:text-base md:text-lg">
               <p>
-                Hey there, I&apos;m Muhammad Fiaz, a self-taught full stack
+                Hey there, I&apos;m Daniel Salas, a self-taught full stack
                 developer, founder, entrepreneur, freelancer, and open-source
                 builder. I have been coding since childhood, and that early
                 curiosity became a long-term focus on building useful products
@@ -149,7 +149,7 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
                 variant="secondary"
                 className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
               >
-                <Link href="mailto:contact@muhammadfiaz.com">
+                <Link href="mailto:danielhachac@gmail.com">
                   Business Inquiries
                 </Link>
               </Button>

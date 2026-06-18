@@ -6,21 +6,21 @@ const cookiesPolicyOgImageUrl = `${siteUrl}/cookies-policy/opengraph-image`;
 
 export const metadata: Metadata = {
   title: "Cookies Policy",
-  description: "Cookies and tracking technologies policy for muhammadfiaz.com.",
+  description: "Cookies and tracking technologies policy for this website.",
   alternates: { canonical: "/cookies-policy" },
   openGraph: {
-    title: "Cookies Policy | Muhammad Fiaz",
+    title: "Cookies Policy | Daniel Salas",
     description:
-      "How cookies and analytics technologies are used on muhammadfiaz.com.",
+      "How cookies and analytics technologies are used on this website.",
     url: `${siteUrl}/cookies-policy`,
     type: "website",
     images: [cookiesPolicyOgImageUrl],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cookies Policy | Muhammad Fiaz",
+    title: "Cookies Policy | Daniel Salas",
     description:
-      "How cookies and analytics technologies are used on muhammadfiaz.com.",
+      "How cookies and analytics technologies are used on this website.",
     images: [cookiesPolicyOgImageUrl],
   },
 };
@@ -29,7 +29,7 @@ export default function CookiesPolicyPage() {
   return (
     <PolicyPageClient
       pageTitle="Cookies Policy"
-      intro="This Cookies Policy explains how cookies and related tracking technologies are used on muhammadfiaz.com."
+      intro="This Cookies Policy explains how cookies and related tracking technologies are used on this website."
       sections={[
         {
           title: "What Are Cookies",
@@ -56,7 +56,7 @@ export default function CookiesPolicyPage() {
           title: "Consent",
           content: [
             "By using this website and accepting the cookie notice, you consent to cookie usage as described in this policy.",
-            "For policy questions, contact: contact@muhammadfiaz.com.",
+            "For policy questions, contact: danielhachac@gmail.com.",
           ],
         },
       ]}

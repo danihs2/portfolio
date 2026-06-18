@@ -9,8 +9,7 @@ import {
   PORTFOLIO_REPO_URL,
 } from "@/lib/portfolio-version";
 
-const RELEASE_API_URL =
-  "https://api.github.com/repos/muhammad-fiaz/portfolio/releases/latest";
+const RELEASE_API_URL = process.env.NEXT_PUBLIC_RELEASE_API_URL ?? "";
 const DISMISS_STORAGE_KEY = "portfolio-release-notice-dismiss-until";
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -67,6 +66,10 @@ export function ReleaseUpdateNotice() {
     const controller = new AbortController();
 
     const checkRelease = async () => {
+      if (!RELEASE_API_URL) {
+        return;
+      }
+
       try {
         const response = await fetch(RELEASE_API_URL, {
           signal: controller.signal,
@@ -168,7 +171,9 @@ export function ReleaseUpdateNotice() {
             Got It (1 Day)
           </button>
           <Link
-            href={`${PORTFOLIO_REPO_URL}/releases/latest`}
+            href={`${PORTFOLIO_REPO_URL || "/"}${
+              PORTFOLIO_REPO_URL ? "/releases/latest" : ""
+            }`}
             target="_blank"
             rel="noreferrer noopener"
             className="inline-flex items-center justify-center border-4 border-black bg-primary px-4 py-2 text-sm font-black uppercase text-primary-foreground shadow-retro-sm transition hover:translate-x-1 hover:translate-y-1 hover:shadow-none"

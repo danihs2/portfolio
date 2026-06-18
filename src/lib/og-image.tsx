@@ -113,7 +113,7 @@ export function buildOgImage({
             fontWeight: 800,
           }}
         >
-          muhammadfiaz.com
+          Daniel Salas
         </div>
       </div>
     </div>,
