@@ -192,7 +192,7 @@ export function BusinessInquiryPopup() {
                 >
                   {mutation.isPending || isSubmitting
                     ? "Sending..."
-                    : "Submit Inquiry"}
+                    : "Coming soon — please send an email"}
                 </Button>
               </div>
             </form>

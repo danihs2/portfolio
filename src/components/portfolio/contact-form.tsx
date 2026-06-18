@@ -366,7 +366,7 @@ export function ContactForm() {
             >
               {mutation.isPending || isSubmitting
                 ? "Sending..."
-                : "Send Inquiry"}
+                : "Coming soon — please send an email"}
             </Button>
           </motion.div>
         </div>

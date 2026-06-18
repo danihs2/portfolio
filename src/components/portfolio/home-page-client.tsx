@@ -284,7 +284,7 @@ export function HomePageClient({
             <div className="order-1 mx-auto w-full max-w-56 border-4 border-black bg-primary p-2 shadow-retro-md sm:max-w-xs sm:p-3 md:order-2 md:max-w-sm">
               <div className="border-4 border-black bg-card p-0">
                 <Image
-                  src="/myprofile.jpg"
+                  src="/myprofile2.png"
                   alt="Daniel Salas"
                   width={384}
                   height={384}
