@@ -65,7 +65,7 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
           <div className="mx-auto w-full max-w-xs border-4 border-black bg-primary p-3 shadow-retro-md">
             <div className="border-4 border-black bg-card p-0">
               <Image
-                src="https://avatars.githubusercontent.com/u/75434191?v=4"
+                src="/myprofile.jpg"
                 alt="Daniel Salas"
                 width={420}
                 height={420}

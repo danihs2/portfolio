@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const items = [
   "25+ HAPPY CLIENTS WORLDWIDE",
   "99.9% DELIVERY",
-  "BASED IN INDIA",
+  "BASED IN MEXICO",
 ];
 
 export function StatsMarquee() {
