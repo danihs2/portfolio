@@ -17,15 +17,13 @@ RUN bun run build
 FROM oven/bun:latest AS runner
 WORKDIR /app
 
-# Copy dependency manifests and prisma schema first
+# Copy required runtime files
 COPY --from=builder /app/package.json package.json
 COPY --from=builder /app/bun.lock bun.lock
 COPY --from=builder /app/prisma prisma
+COPY --from=builder /app/node_modules node_modules
 
-# Install only production dependencies
-RUN bun install --production
-
-# Copy required files from build stage
+# Copy built app
 COPY --from=builder /app/.next .next
 COPY --from=builder /app/public public
 COPY --from=builder /app/src/generated src/generated
@@ -33,4 +31,4 @@ COPY --from=builder /app/src/generated src/generated
 ENV NODE_ENV=production
 EXPOSE 3000
 
-CMD ["sh", "-lc", "bunx prisma migrate deploy && node prisma/seed.mjs && bun run start -- -p 3000 -H 0.0.0.0"]
+CMD ["sh", "-lc", "bunx prisma migrate deploy && bun prisma/seed.mjs && bun run start -- -p 3000 -H 0.0.0.0"]
