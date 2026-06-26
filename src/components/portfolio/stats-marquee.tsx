@@ -23,7 +23,7 @@ export function StatsMarquee() {
         className="flex w-max font-black uppercase tracking-wide"
         animate={{ x: ["0%", "-50%"] }}
         transition={{
-          duration: 18,
+          duration: 30,
           repeat: Number.POSITIVE_INFINITY,
           ease: "linear",
         }}

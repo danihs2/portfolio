@@ -2,56 +2,16 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
-  BlogPost,
+  ContactSubmissionValues,
   GitHubOverviewPayload,
-  GithubRepo,
   HackatimePayload,
-  Web3FormsSubmissionValues,
 } from "@/lib/portfolio-types";
 import { submitContactAction } from "@/lib/server/contact-actions";
 
-export type { Web3FormsSubmissionValues };
-
 const TWELVE_HOURS_MS = 1000 * 60 * 60 * 12;
 
-async function submitContactForm(values: Web3FormsSubmissionValues) {
+async function submitContactForm(values: ContactSubmissionValues) {
   return submitContactAction(values);
-}
-
-export function usePortfolioReposQuery(
-  initialData?: GithubRepo[],
-  user?: string,
-) {
-  return useQuery({
-    queryKey: ["portfolio", "repos", user ?? "default"],
-    queryFn: async (): Promise<GithubRepo[]> => {
-      const url = user
-        ? `/api/portfolio/repos?user=${user}`
-        : "/api/portfolio/repos";
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Failed to fetch repos");
-      return res.json() as Promise<GithubRepo[]>;
-    },
-    staleTime: TWELVE_HOURS_MS,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    initialData,
-  });
-}
-
-export function usePortfolioPostsQuery(initialData?: BlogPost[]) {
-  return useQuery({
-    queryKey: ["portfolio", "posts"],
-    queryFn: async (): Promise<BlogPost[]> => {
-      const res = await fetch("/api/portfolio/posts");
-      if (!res.ok) throw new Error("Failed to fetch posts");
-      return res.json() as Promise<BlogPost[]>;
-    },
-    staleTime: TWELVE_HOURS_MS,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    initialData,
-  });
 }
 
 export function usePortfolioHackatimeQuery(

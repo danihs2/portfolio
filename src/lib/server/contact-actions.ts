@@ -1,40 +1,55 @@
 "use server";
 
-import type { Web3FormsSubmissionValues } from "@/lib/portfolio-types";
+import { z } from "zod";
+import type { ContactSubmissionValues } from "@/lib/portfolio-types";
+import { sendContactNotificationEmail } from "@/lib/server/mailer";
+import { prisma } from "@/lib/server/prisma";
 
-const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
-
-export async function submitContactAction(values: Web3FormsSubmissionValues) {
-  const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
-
-  if (!accessKey) {
-    throw new Error("Contact form is not configured. Missing access key.");
-  }
-
-  const payload = {
-    access_key: accessKey,
-    name: values.name,
-    email: values.email,
-    country: values.country,
-    phone: values.phone || "",
-    business_inquiry: values.businessInquiry,
-    project_details: values.projectDetails,
-    expected_start_date: values.expectedStartDate || "",
-    expected_end_date: values.expectedEndDate || "",
-    subject: `New Business Inquiry from ${values.name}`,
-  };
-
-  const response = await fetch(WEB3FORMS_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+const contactSubmissionSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters."),
+    email: z.email("Enter a valid email."),
+    country: z.string().min(2, "Country is required."),
+    phone: z
+      .string()
+      .trim()
+      .optional()
+      .refine(
+        (value) => !value || /^\+?[0-9()\-\s]{7,20}$/.test(value),
+        "Phone number format looks invalid.",
+      ),
+    businessInquiry: z.string().min(4, "Business inquiry topic is required."),
+    projectDetails: z
+      .string()
+      .min(20, "Project details must be at least 20 characters."),
+    expectedStartDate: z.string().optional(),
+    expectedEndDate: z.string().optional(),
+  })
+  .superRefine((values, ctx) => {
+    if (values.expectedStartDate && values.expectedEndDate) {
+      const start = Date.parse(values.expectedStartDate);
+      const end = Date.parse(values.expectedEndDate);
+      if (!Number.isNaN(start) && !Number.isNaN(end) && end < start) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["expectedEndDate"],
+          message: "Expected end date must be after start date.",
+        });
+      }
+    }
   });
 
-  const result = await response.json();
+export async function submitContactAction(values: ContactSubmissionValues) {
+  const payload = contactSubmissionSchema.parse(values);
 
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Failed to submit contact form.");
-  }
+  const savedSubmission = await prisma.contactSubmission.create({
+    data: payload,
+  });
 
-  return result;
+  await sendContactNotificationEmail(payload);
+
+  return {
+    id: savedSubmission.id,
+    success: true,
+  };
 }

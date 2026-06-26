@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ProjectPageClient } from "@/components/pages/project-page-client";
-import { getGithubRepos } from "@/lib/server/portfolio-data";
+import { portfolioProjects } from "@/lib/portfolio-projects";
 import { siteUrl } from "@/lib/site-config";
 
 const projectOgImageUrl = `${siteUrl}/project/opengraph-image`;
@@ -8,20 +8,23 @@ const projectOgImageUrl = `${siteUrl}/project/opengraph-image`;
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "SSR-fetched GitHub projects by Daniel Salas with filtering and search.",
+    "Selected product work across marketplaces, integrations, portals, reservation systems, and VPS-backed software delivery.",
   alternates: {
     canonical: "/project",
   },
   keywords: [
-    "github projects",
-    "full stack projects",
-    "open source repositories",
-    "startup product builds",
+    "Daniel Hachac Salas",
+    "Daniel Hachac",
+    "Daniel Salas",
+    "portfolio projects",
+    "full stack delivery",
+    "marketplace platform",
+    "Linux VPS deployment",
   ],
   openGraph: {
-    title: "Projects by Daniel Salas",
+    title: "Projects | Daniel Hachac Salas",
     description:
-      "Explore top-starred and recently updated projects with filters and search.",
+      "Selected product work across marketplaces, integrations, portals, and operational software.",
     url: `${siteUrl}/project`,
     type: "website",
     images: [
@@ -29,15 +32,15 @@ export const metadata: Metadata = {
         url: projectOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "Daniel Salas Projects",
+        alt: "Daniel Hachac Salas Projects",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Projects by Daniel Salas",
+    title: "Projects | Daniel Hachac Salas",
     description:
-      "Explore top-starred and recently updated projects with filters and search.",
+      "Selected product work across marketplaces, integrations, portals, and operational software.",
     images: [projectOgImageUrl],
   },
 };
@@ -46,47 +49,24 @@ function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-async function safeFetch<T>(fallback: T, fn: () => Promise<T>): Promise<T> {
-  try {
-    return await fn();
-  } catch {
-    return fallback;
-  }
-}
-
-export default async function ProjectPage() {
-  const repos = await safeFetch([], () => getGithubRepos());
-
+export default function ProjectPage() {
   const projectsJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Projects by Daniel Salas",
+    name: "Projects by Daniel Hachac Salas",
     url: `${siteUrl}/project`,
-    description: "GitHub repositories and product engineering work.",
+    description: "Selected shipped projects and product delivery work.",
     mainEntity: {
       "@type": "ItemList",
-      itemListElement: repos.map((repo, index) => ({
+      itemListElement: portfolioProjects.map((project, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: repo.html_url,
         item: {
-          "@type": "SoftwareSourceCode",
-          name: repo.name,
-          codeRepository: repo.html_url,
-          description: repo.description ?? "No description provided.",
-          programmingLanguage: repo.language ?? "Mixed",
-          author: {
-            "@type": "Person",
-            name: "Daniel Salas",
-            url: siteUrl,
-          },
-          publisher: {
-            "@type": "Person",
-            name: "Daniel Salas",
-            url: siteUrl,
-          },
-          keywords: (repo.topics ?? []).join(", "),
-          dateModified: repo.updated_at,
+          "@type": "CreativeWork",
+          name: project.title,
+          description: project.description,
+          dateCreated: project.period,
+          url: project.liveUrl ?? `${siteUrl}/project`,
         },
       })),
     },
@@ -119,27 +99,29 @@ export default async function ProjectPage() {
       <script type="application/ld+json">
         {serializeJsonLd(breadcrumbJsonLd)}
       </script>
+
       <section className="border-4 border-black bg-card p-4 shadow-retro-lg sm:p-6 md:p-8">
         <h1 className="font-pixel text-3xl uppercase sm:text-4xl md:text-5xl">
           Projects
         </h1>
         <p className="mt-3 max-w-3xl text-sm font-medium leading-relaxed sm:text-base">
-          Booting shipped products across full stack apps, AI tooling, and
-          open-source libraries. Filter by language and search by domain.
+          Selected work across SEO-driven marketplaces, payment integrations,
+          supplier portals, reservation systems, and Linux VPS-backed
+          operations.
         </p>
       </section>
 
       <section className="space-y-2">
         <h2 className="font-display text-2xl uppercase sm:text-3xl">
-          Browse Project Index
+          Delivery Index
         </h2>
         <p className="text-sm font-medium leading-relaxed sm:text-base">
-          Filter by topic, sort by stars or recency, and open repositories or
-          live deployments.
+          Browse the current portfolio by category, search for a delivery
+          context, and open the live projects that are publicly accessible.
         </p>
       </section>
 
-      <ProjectPageClient initialRepos={repos} />
+      <ProjectPageClient />
     </div>
   );
 }

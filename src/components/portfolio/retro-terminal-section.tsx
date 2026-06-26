@@ -17,22 +17,22 @@ const stepLines: Array<{
   { kind: "type", text: "C:\\ops> terminal.exe", className: "text-[#64cbff]" },
   {
     kind: "line",
-    text: "# Launching deployment shell for production workflow.",
+    text: "# Launching VPS deployment shell for active production workflow.",
     className: "text-[#ffc96b]",
   },
   {
     kind: "type",
-    text: "$ ssh deploy@prod-node-01",
+    text: "$ ssh deploy@vps-app-01",
     className: "text-[#64cbff]",
   },
   {
     kind: "line",
-    text: "✔ Connected to production host.",
+    text: "✔ Connected to Ubuntu production host.",
     className: "text-[#84ff6f]",
   },
   {
     kind: "line",
-    text: "# Checking env vars, secrets mount, and release version tag.",
+    text: "# Checking env vars, PM2 process state, and release artifact.",
     className: "text-[#ffc96b]",
   },
   {
@@ -42,12 +42,12 @@ const stepLines: Array<{
   },
   {
     kind: "line",
-    text: "# Updated reverse-proxy rules for app and API routes.",
+    text: "# Updated reverse-proxy rules, SSL paths, and upstream ports.",
     className: "text-[#ffc96b]",
   },
   {
     kind: "line",
-    text: "# Enabled gzip and basic caching headers for static assets.",
+    text: "# Confirmed DNS target, gzip headers, and cache directives.",
     className: "text-[#ffc96b]",
   },
   { kind: "type", text: "$ sudo nginx -t", className: "text-[#64cbff]" },
@@ -58,47 +58,47 @@ const stepLines: Array<{
   },
   {
     kind: "line",
-    text: "# Running pre-deploy smoke checks before restart.",
+    text: "# Running build and smoke checks before restart.",
     className: "text-[#ffc96b]",
   },
   {
     kind: "type",
-    text: "$ bun run build ; pm2 restart portfolio-app",
+    text: "$ npm run build && pm2 restart portfolio-app",
     className: "text-[#64cbff]",
   },
   {
     kind: "line",
-    text: "✔ Build passed. Zero red flags.",
+    text: "✔ Build passed. Static assets and server bundle are ready.",
     className: "text-[#84ff6f]",
   },
   {
     kind: "line",
-    text: "✔ Health checks green across routes and API.",
+    text: "✔ Health checks green across app routes and API endpoints.",
     className: "text-[#84ff6f]",
   },
   {
     kind: "line",
-    text: "# Verifying CDN cache, SSL cert, and fallback routes.",
+    text: "# Verifying SSL certificate, domain routing, and fallback behavior.",
     className: "text-[#ffc96b]",
   },
   {
     kind: "line",
-    text: "ℹ modules live: home.hero, github.graphs, project.filters, blog.filters",
+    text: "ℹ live services: web app, form handler, admin panel, database client",
     className: "text-[#64cbff]",
   },
   {
     kind: "line",
-    text: "# Release logs archived and on-call alert channel updated.",
+    text: "# Release logs archived and maintenance notes recorded.",
     className: "text-[#ffc96b]",
   },
   {
     kind: "line",
-    text: "✔ Success: Portfolio deployment completed with business-ready uptime.",
+    text: "✔ Success: VPS deployment completed with production-ready uptime.",
     className: "text-[#84ff6f]",
   },
   {
     kind: "line",
-    text: "Next: Contact me to build your next product release pipeline.",
+    text: "Next: Ship the next feature, fix, or deployment with confidence.",
     className: "text-[#ffc96b]",
   },
 ];
@@ -198,7 +198,7 @@ export function RetroTerminalSection() {
     animate(supportCards, {
       opacity: [0, 1],
       translateY: [12, 0],
-      delay: (_: unknown, index: number) => index * 75,
+      delay: 75,
       duration: 300,
       ease: "outQuad",
     });
@@ -232,17 +232,17 @@ export function RetroTerminalSection() {
           </Card.Header>
           <Card.Content className="space-y-3">
             <p className="font-medium leading-relaxed">
-              I handle end-to-end deployments for modern product stacks across
-              AWS, Google Cloud, DigitalOcean, and serverless platforms.
+              I handle Linux VPS deployments for web applications and backend
+              services, from initial server access to production verification.
             </p>
             <p className="font-medium leading-relaxed">
-              From Nginx routing and TLS setup to CI/CD pipelines, rollback
-              safety, monitoring, and uptime checks, delivery is
-              production-ready and business-focused.
+              That includes SSH access, Nginx routing, SSL setup, domain and
+              DNS configuration, PM2 restarts, environment checks, and release
+              validation after deployment.
             </p>
             <p className="font-medium leading-relaxed">
-              You get reliable launches, clean handover docs, and systems built
-              to scale without late-night panic patches.
+              The goal is reliable production delivery with clean handoff,
+              lower deployment risk, and fewer emergency fixes after launch.
             </p>
           </Card.Content>
         </Card>

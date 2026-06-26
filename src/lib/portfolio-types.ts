@@ -1,4 +1,6 @@
-export type Web3FormsSubmissionValues = {
+import type { BlogPostStatus } from "@/generated/prisma";
+
+export type ContactSubmissionValues = {
   name: string;
   email: string;
   country: string;
@@ -7,6 +9,18 @@ export type Web3FormsSubmissionValues = {
   projectDetails: string;
   expectedStartDate?: string;
   expectedEndDate?: string;
+};
+
+export type AdminBlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  status: BlogPostStatus;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string | null;
 };
 
 export interface GithubRepo {
@@ -24,17 +38,6 @@ export interface GithubRepo {
   homepage: string | null;
   topics: string[];
   updated_at: string;
-}
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  url: string;
-  source: "Hashnode" | "Dev.to" | "Medium";
-  tags: string[];
-  publishedAt: string;
-  readingMinutes: number;
 }
 
 export interface HackatimePayload {

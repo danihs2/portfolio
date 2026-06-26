@@ -3,24 +3,12 @@
 import { animate } from "animejs";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import {
-  Github,
-  Link2,
-  Linkedin,
-  Twitter,
-  Youtube,
-} from "@/components/retroui/icons";
+import { Github, Linkedin, Mail } from "@/components/retroui/icons";
 import {
   CURRENT_PORTFOLIO_VERSION,
   PORTFOLIO_REPO_URL,
 } from "@/lib/portfolio-version";
-import {
-  githubUrl,
-  linkedinUrl,
-  linkHubUrl,
-  xUrl,
-  youtubeUrl,
-} from "@/lib/site-config";
+import { contactMailtoUrl, githubUrl, linkedinUrl } from "@/lib/site-config";
 
 export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -39,7 +27,7 @@ export function Footer() {
     animate(socialTargets, {
       opacity: [0, 1],
       translateY: [10, 0],
-      delay: (_: unknown, index: number) => index * 45,
+      delay: 45,
       duration: 280,
       ease: "outQuad",
     });
@@ -47,7 +35,7 @@ export function Footer() {
     animate(policyTargets, {
       opacity: [0, 1],
       translateY: [10, 0],
-      delay: (_: unknown, index: number) => 120 + index * 35,
+      delay: 160,
       duration: 280,
       ease: "outQuad",
     });
@@ -83,12 +71,12 @@ export function Footer() {
             className="inline-flex border-4 border-black bg-[#111827] px-3 py-2 text-xs font-black uppercase text-white shadow-retro-sm sm:text-sm"
             data-footer-policy
           >
-            Copyright {currentYear} Muhammad Fiaz
+            Copyright {currentYear} Daniel Hachac Salas
           </p>
         </div>
 
         <div className="flex w-full flex-col items-center gap-3 lg:w-auto lg:items-end">
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <Link
               href={githubUrl}
               className="retro-social-icon"
@@ -98,16 +86,6 @@ export function Footer() {
               data-footer-social
             >
               <Github className="h-4 w-4" />
-            </Link>
-            <Link
-              href={xUrl}
-              className="retro-social-icon"
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Twitter"
-              data-footer-social
-            >
-              <Twitter className="h-4 w-4" />
             </Link>
             <Link
               href={linkedinUrl}
@@ -120,24 +98,14 @@ export function Footer() {
               <Linkedin className="h-4 w-4" />
             </Link>
             <Link
-              href={youtubeUrl}
+              href={contactMailtoUrl}
               className="retro-social-icon"
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="YouTube"
+              aria-label="Email"
               data-footer-social
             >
-              <Youtube className="h-4 w-4" />
-            </Link>
-            <Link
-              href={linkHubUrl}
-              className="retro-social-icon"
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Link Hub"
-              data-footer-social
-            >
-              <Link2 className="h-4 w-4" />
+              <Mail className="h-4 w-4" />
             </Link>
           </div>
 
@@ -175,13 +143,6 @@ export function Footer() {
               data-footer-policy
             >
               Delivery
-            </Link>
-            <Link
-              href="/cookies-policy"
-              className="retro-link"
-              data-footer-policy
-            >
-              Cookies
             </Link>
           </div>
         </div>

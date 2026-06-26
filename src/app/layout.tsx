@@ -1,29 +1,19 @@
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
-import dynamic from "next/dynamic";
 import { Bungee, Press_Start_2P, Space_Grotesk } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { AnimePageAnimator } from "@/components/layout/anime-page-animator";
 import { Footer } from "@/components/layout/footer";
-import { GoogleAnalytics } from "@/components/layout/google-analytics";
-import { GoogleTagManager } from "@/components/layout/google-tag-manager";
 import { Navbar } from "@/components/layout/navbar";
 import { RouteProgressBar } from "@/components/layout/route-progress-bar";
 import { ThemeProvider } from "@/components/theme-provider";
 import {
-  donationUrl,
-  fiazDevUrl,
+  contactMailtoUrl,
   githubUrl,
   hackatimeUrl,
   linkedinUrl,
-  linkHubUrl,
   ogImageUrl,
   siteUrl,
-  sponsorUrl,
-  xUrl,
-  youtubeUrl,
 } from "@/lib/site-config";
 
 const spaceGrotesk = Space_Grotesk({
@@ -43,73 +33,35 @@ const bungee = Bungee({
   subsets: ["latin"],
 });
 
-const BusinessScaleNotice = dynamic(
-  () =>
-    import("@/components/layout/business-scale-notice").then(
-      (module) => module.BusinessScaleNotice,
-    ),
-  {
-    loading: () => null,
-  },
-);
-
-const CookieNotice = dynamic(
-  () =>
-    import("@/components/layout/cookie-notice").then(
-      (module) => module.CookieNotice,
-    ),
-  {
-    loading: () => null,
-  },
-);
-
-const ReleaseUpdateNotice = dynamic(
-  () =>
-    import("@/components/layout/release-update-notice").then(
-      (module) => module.ReleaseUpdateNotice,
-    ),
-  {
-    loading: () => null,
-  },
-);
-
-const BusinessInquiryPopup = dynamic(
-  () =>
-    import("@/components/layout/business-inquiry-popup").then(
-      (module) => module.BusinessInquiryPopup,
-    ),
-  {
-    loading: () => null,
-  },
-);
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  applicationName: "Daniel Salas Portfolio",
+  applicationName: "Daniel Hachac Salas Portfolio",
   title: {
-    default: "Daniel Salas | Founder, Entrepreneur, Full Stack Developer",
-    template: "%s | Daniel Salas",
+    default: "Daniel Hachac Salas | Full-Stack Developer",
+    template: "%s | Daniel Hachac Salas",
   },
   description:
-    "High-converting personal portfolio of Daniel Salas. Founder, Entrepreneur, Full Stack Developer, Freelancer and Full-Time Open-Sourcerer.",
+    "Full-stack developer focused on production software, REST APIs, integrations, and Linux VPS delivery.",
   alternates: {
     canonical: "/",
   },
   keywords: [
+    "Daniel Hachac Salas",
+    "Daniel Hachac",
     "Daniel Salas",
-    "Daniel Salas portfolio",
+    "Hachac Salas",
+    "Daniel Salas",
+    "Daniel Hachac Salas portfolio",
     "Full Stack Developer",
     "Next.js developer",
     "TypeScript developer",
-    "Freelancer",
-    "Startup product engineer",
-    "Open-Sourcerer",
-    "WakaTime",
+    "REST API developer",
+    "Linux VPS deployments",
+    "PostgreSQL developer",
     "Portfolio",
-    "India",
   ],
-  creator: "Daniel Salas",
-  publisher: "Daniel Salas",
+  creator: "Daniel Hachac Salas",
+  publisher: "Daniel Hachac Salas",
   robots: {
     index: true,
     follow: true,
@@ -122,11 +74,11 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Daniel Salas | Founder, Entrepreneur, Full Stack Developer",
+    title: "Daniel Hachac Salas | Full-Stack Developer",
     description:
-      "25+ happy clients worldwide, 99.9% delivery, and modern full stack products built with speed.",
+      "Production-focused full-stack development, integrations, and Linux VPS deployment experience.",
     url: siteUrl,
-    siteName: "Daniel Salas",
+    siteName: "Daniel Hachac Salas",
     type: "website",
     locale: "en_US",
     images: [
@@ -134,15 +86,15 @@ export const metadata: Metadata = {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "Daniel Salas Portfolio v5",
+        alt: "Daniel Hachac Salas Portfolio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel Salas",
+    title: "Daniel Hachac Salas",
     description:
-      "Founder, Entrepreneur, Full Stack Developer, Freelancer and Full-Time Open-Sourcerer.",
+      "Full-stack developer focused on product delivery, APIs, and Linux VPS operations.",
     images: [ogImageUrl],
   },
 };
@@ -157,9 +109,6 @@ export function generateViewport(): Viewport {
   };
 }
 
-const DEFAULT_GTM_ID = "GTM-5BQ5RPW2";
-const DEFAULT_GA_ID = "G-SDJ0K1Y70X";
-
 function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
@@ -171,45 +120,36 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || DEFAULT_GTM_ID;
-  const gaId = process.env.NEXT_PUBLIC_GA_ID || DEFAULT_GA_ID;
-  const shouldLoadAnalytics = process.env.NODE_ENV === "production";
-
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "Daniel Salas",
-    url: siteUrl,
-    jobTitle: "Founder, Entrepreneur, Full Stack Developer",
-    sameAs: [
-      githubUrl,
-      linkedinUrl,
-      xUrl,
-      youtubeUrl,
-      hackatimeUrl,
-      linkHubUrl,
-      sponsorUrl,
-      donationUrl,
-      fiazDevUrl,
+    name: "Daniel Hachac Salas",
+    alternateName: [
+      "Daniel Hachac",
+      "Daniel Salas",
+      "Hachac Salas",
     ],
+    url: siteUrl,
+    jobTitle: "Full-Stack Developer",
+    sameAs: [githubUrl, linkedinUrl, hackatimeUrl, contactMailtoUrl],
     address: {
       "@type": "PostalAddress",
-      addressCountry: "IN",
+      addressCountry: "MX",
     },
   };
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Daniel Salas",
+    name: "Daniel Hachac Salas",
     url: siteUrl,
     inLanguage: "en",
     publisher: {
       "@type": "Person",
-      name: "Daniel Salas",
+      name: "Daniel Hachac Salas",
       url: siteUrl,
     },
-    sameAs: [linkHubUrl, fiazDevUrl, sponsorUrl, donationUrl],
+    sameAs: [githubUrl, linkedinUrl, contactMailtoUrl],
     potentialAction: {
       "@type": "SearchAction",
       target: `${siteUrl}/project?query={search_term_string}`,
@@ -220,20 +160,14 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Daniel Salas",
-    url: fiazDevUrl,
+    name: "Daniel Hachac Salas",
+    url: siteUrl,
     founder: {
       "@type": "Person",
-      name: "Daniel Salas",
+      name: "Daniel Hachac Salas",
       url: siteUrl,
     },
-    sameAs: [githubUrl, linkedinUrl, xUrl, youtubeUrl, linkHubUrl],
-    sponsor: {
-      "@type": "Offer",
-      url: sponsorUrl,
-      name: "Sponsor Daniel Salas on GitHub",
-    },
-    funding: donationUrl,
+    sameAs: [githubUrl, linkedinUrl, contactMailtoUrl],
   };
 
   const shellFallback = (
@@ -285,10 +219,6 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${bungee.variable} ${pressStart.variable} antialiased`}
       >
-        {shouldLoadAnalytics && gtmId ? (
-          <GoogleTagManager gtmId={gtmId} />
-        ) : null}
-        {shouldLoadAnalytics && gaId ? <GoogleAnalytics gaId={gaId} /> : null}
         <Suspense fallback={shellFallback}>
           <ThemeProvider>
             <RouteProgressBar />
@@ -299,15 +229,9 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
-              <BusinessScaleNotice />
-              <BusinessInquiryPopup />
-              <CookieNotice />
-              <ReleaseUpdateNotice />
             </div>
           </ThemeProvider>
         </Suspense>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

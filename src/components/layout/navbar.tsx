@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { SignInButton } from "@/components/layout/sign-in-button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/retroui/Button";
 import { Menu } from "@/components/retroui/icons";
@@ -17,6 +16,8 @@ const navItems = [
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
+
+const resumeHref = "/CV_Daniel_Hachac_Salas_Harvard_EN%20(2).pdf";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -50,9 +51,14 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex md:items-center md:gap-2">
-            <SignInButton className="h-11 border-4 border-black px-4 font-black uppercase shadow-retro-sm" />
-          </div>
+          <Link
+            href={resumeHref}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="hidden border-4 border-black bg-primary px-3 py-2 text-sm font-black uppercase tracking-wide text-primary-foreground shadow-retro transition hover:translate-x-1 hover:translate-y-1 hover:shadow-none md:inline-flex"
+          >
+            Resume
+          </Link>
           <ThemeToggle />
           <Button
             variant="secondary"
@@ -75,7 +81,15 @@ export function Navbar() {
             className="border-t-4 border-black bg-background p-4 md:hidden"
           >
             <div className="grid gap-2">
-              <SignInButton className="w-full justify-center uppercase" />
+              <Link
+                href={resumeHref}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => setOpen(false)}
+                className="border-4 border-black bg-primary px-3 py-2 text-center text-sm font-black uppercase text-primary-foreground shadow-retro"
+              >
+                Resume
+              </Link>
               {navItems.map((item) => (
                 <Link
                   key={item.href}

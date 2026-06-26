@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model AdminUser {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  posts        BlogPost[]
+  sessions     AdminSession[]
+}
+
+model AdminSession {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  userId    String
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model BlogPost {
+  id          String         @id @default(cuid())
+  title       String
+  slug        String         @unique
+  excerpt     String
+  content     String
+  status      BlogPostStatus @default(DRAFT)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  publishedAt DateTime?
+  authorId    String
+  author      AdminUser      @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([status, updatedAt])
+}
+
+model ContactSubmission {
+  id                String   @id @default(cuid())
+  name              String
+  email             String
+  country           String
+  phone             String?
+  businessInquiry   String
+  projectDetails    String
+  expectedStartDate String?
+  expectedEndDate   String?
+  createdAt         DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([email])
+}

@@ -35,7 +35,7 @@ export function ContactPageClient() {
     animate(sections, {
       opacity: [0, 1],
       translateY: [16, 0],
-      delay: (_: unknown, index: number) => index * 80,
+      delay: 80,
       duration: 300,
       ease: "outQuad",
     });
@@ -51,15 +51,11 @@ export function ContactPageClient() {
           <h1 className="font-pixel text-3xl uppercase sm:text-4xl md:text-5xl">
             Contact
           </h1>
-          <span className="inline-block w-fit px-3 py-1.5 bg-primary text-primary-foreground font-black uppercase text-sm sm:text-base border-2 border-black rotate-[-2deg] shadow-retro-sm">
-            20% Off Limited Time Summer Offer
-          </span>
         </div>
         <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed sm:text-base">
-          Ready to build something valuable? Submit your inquiry with complete
-          details: name, email, country, business inquiry topic, project
-          requirements, and optional phone/start/end dates so I can reply with a
-          clear execution plan.
+          Ready to build something valuable? Share your project context, goals,
+          and timing so I can respond with a practical next step and a realistic
+          execution path.
         </p>
       </section>
 

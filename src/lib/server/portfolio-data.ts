@@ -1,7 +1,6 @@
 import "server-only";
 import { cacheLife } from "next/cache";
 import type {
-  BlogPost,
   GitHubOverviewPayload,
   GithubRepo,
   HackatimePayload,
@@ -31,36 +30,6 @@ interface GitHubContributionsResponse {
       };
     };
   };
-}
-
-interface HashnodeResponse {
-  data?: {
-    publication?: {
-      posts?: {
-        edges?: Array<{
-          node: {
-            id: string;
-            title: string;
-            brief: string;
-            url: string;
-            publishedAt: string;
-            readTimeInMinutes: number;
-            tags: Array<{ name: string }>;
-          };
-        }>;
-      };
-    };
-  };
-}
-
-interface DevToPost {
-  id: number;
-  title: string;
-  description: string;
-  url: string;
-  published_at: string;
-  reading_time_minutes: number;
-  tag_list: string[];
 }
 
 interface HackatimeStatsResponse {
@@ -123,8 +92,6 @@ const DEFAULT_GITHUB_USER =
   process.env.GITHUB_USER ??
   process.env.NEXT_PUBLIC_GITHUB_USER ??
   "danielhachac";
-const DEVTO_USER = process.env.DEVTO_USER ?? "danielhachac";
-const HASHNODE_HOST = process.env.HASHNODE_HOST ?? "";
 const GITHUB_CACHE_REVALIDATE_SECONDS = 60 * 60 * 12;
 
 async function getCurrentTimestamp() {
@@ -437,99 +404,6 @@ export async function getGithubOverview(
     updateDates,
     commitHistory,
   };
-}
-
-async function fetchHashnodePosts(): Promise<BlogPost[]> {
-  if (!HASHNODE_HOST) {
-    return [];
-  }
-
-  const query = `
-    query PublicationPosts($host: String!) {
-      publication(host: $host) {
-        posts(first: 50) {
-          edges {
-            node {
-              id
-              title
-              brief
-              url
-              publishedAt
-              readTimeInMinutes
-              tags {
-                name
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const response = await fetch("https://gql.hashnode.com", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, variables: { host: HASHNODE_HOST } }),
-    cache: "force-cache",
-    next: { revalidate: 3600, tags: ["blogs", "hashnode"] },
-  });
-
-  if (!response.ok) return [];
-
-  const payload = await safeJsonParse<HashnodeResponse>(response);
-
-  const edges = payload?.data?.publication?.posts?.edges ?? [];
-  return edges.map(({ node }) => ({
-    id: node.id,
-    title: node.title,
-    excerpt: node.brief,
-    url: node.url,
-    source: "Hashnode",
-    tags: node.tags.map((tag) => tag.name),
-    publishedAt: node.publishedAt,
-    readingMinutes: node.readTimeInMinutes,
-  }));
-}
-
-async function fetchDevToPosts(): Promise<BlogPost[]> {
-  const response = await fetch(
-    `https://dev.to/api/articles?username=${DEVTO_USER}&per_page=100`,
-    {
-      cache: "force-cache",
-      next: { revalidate: 3600, tags: ["blogs", "devto"] },
-    },
-  );
-
-  if (!response.ok) return [];
-
-  const payload = await safeJsonParse<DevToPost[]>(response);
-
-  return (payload ?? []).map((post) => ({
-    id: `devto-${post.id}`,
-    title: post.title,
-    excerpt: post.description,
-    url: post.url,
-    source: "Dev.to",
-    tags: post.tag_list,
-    publishedAt: post.published_at,
-    readingMinutes: post.reading_time_minutes,
-  }));
-}
-
-async function fetchMediumPosts(): Promise<BlogPost[]> {
-  return [];
-}
-
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  const [hashnode, devto, medium] = await Promise.all([
-    fetchHashnodePosts(),
-    fetchDevToPosts(),
-    fetchMediumPosts(),
-  ]);
-
-  return [...hashnode, ...devto, ...medium].sort(
-    (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
-  );
 }
 
 export async function getHackatimeStats(): Promise<HackatimePayload | null> {

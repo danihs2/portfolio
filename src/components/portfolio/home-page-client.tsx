@@ -3,20 +3,17 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-// Hero section components — loaded eagerly (above the fold, must render immediately)
 import { HeroFloatingBadges } from "@/components/portfolio/hero-floating-badges";
 import { HyperNameReveal } from "@/components/portfolio/hyper-name-reveal";
 import { StatsMarquee } from "@/components/portfolio/stats-marquee";
 import { BentoCard, BentoGrid } from "@/components/retroui/Bento";
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
-import { Github, Linkedin, Twitter } from "@/components/retroui/icons";
+import { Github, Linkedin, Mail } from "@/components/retroui/icons";
+import { links } from "@/lib/link-items";
+import type { GitHubOverviewPayload, HackatimePayload } from "@/lib/portfolio-types";
+import { githubUrl, hackatimeUrl, linkedinUrl, siteHost } from "@/lib/site-config";
 
-// Below-the-fold components — lazy loaded for performance
-const BlogGrid = dynamic(
-  () => import("@/components/portfolio/blog-grid").then((m) => m.BlogGrid),
-  { ssr: false },
-);
 const GithubOverviewBento = dynamic(
   () =>
     import("@/components/portfolio/github-overview-bento").then(
@@ -24,6 +21,7 @@ const GithubOverviewBento = dynamic(
     ),
   { ssr: false },
 );
+
 const HackatimeBento = dynamic(
   () =>
     import("@/components/portfolio/hackatime-bento").then(
@@ -31,39 +29,13 @@ const HackatimeBento = dynamic(
     ),
   { ssr: false },
 );
-const HomeDeliveryProcess = dynamic(
-  () =>
-    import("@/components/portfolio/home-delivery-process").then(
-      (m) => m.HomeDeliveryProcess,
-    ),
-  { ssr: false },
-);
-const HomeEngagementModel = dynamic(
-  () =>
-    import("@/components/portfolio/home-engagement-model").then(
-      (m) => m.HomeEngagementModel,
-    ),
-  { ssr: false },
-);
-const MorphScrollShowcase = dynamic(
-  () =>
-    import("@/components/portfolio/morph-scroll-showcase").then(
-      (m) => m.MorphScrollShowcase,
-    ),
-  { ssr: false },
-);
+
 const ProjectsGrid = dynamic(
   () =>
     import("@/components/portfolio/projects-grid").then((m) => m.ProjectsGrid),
   { ssr: false },
 );
-const RetroCodeShowcase = dynamic(
-  () =>
-    import("@/components/portfolio/retro-code-showcase").then(
-      (m) => m.RetroCodeShowcase,
-    ),
-  { ssr: false },
-);
+
 const RetroTerminalSection = dynamic(
   () =>
     import("@/components/portfolio/retro-terminal-section").then(
@@ -72,145 +44,66 @@ const RetroTerminalSection = dynamic(
   { ssr: false },
 );
 
-import { links } from "@/lib/link-items";
-import type {
-  BlogPost,
-  GitHubOverviewPayload,
-  GithubRepo,
-  HackatimePayload,
-} from "@/lib/portfolio-types";
-import {
-  donationUrl,
-  githubUrl,
-  hackatimeUrl,
-  linkedinUrl,
-  linkHubUrl,
-  siteHost,
-  sponsorUrl,
-  xUrl,
-} from "@/lib/site-config";
-import { useHomeStore } from "@/store/home-store";
-
-const traits = [
+const highlights = [
   {
-    title: "Business-Driven Builder",
-    text: "I design and ship products that improve conversion, retention, and operational efficiency.",
+    title: "Full-Stack Delivery",
+    text: "I build production features end to end across frontend, backend, integrations, and deployment workflows.",
   },
   {
-    title: "Developer-First Products",
-    text: "I build tools and software experiences that help teams ship faster with better quality.",
+    title: "Business-Focused Engineering",
+    text: "My work is shaped by reliability, maintainability, and practical outcomes instead of demo-driven complexity.",
   },
   {
-    title: "Freelance & Startup Partner",
-    text: "From MVP to scale, I work closely with founders to turn product ideas into reliable systems.",
+    title: "Linux VPS Operations",
+    text: "I handle SSH access, Nginx, SSL, DNS, release checks, and production deployments for real client systems.",
   },
   {
-    title: "Full-Stack Execution",
-    text: "Frontend, backend, automation, and AI integrations delivered with production-ready standards.",
+    title: "Integration Experience",
+    text: "I work with REST APIs, webhooks, payment flows, Supabase, Firebase, and database-backed application logic.",
   },
-];
-
-const focusFilters = [
-  "All",
-  "Product",
-  "Open Source",
-  "AI",
-  "Services",
 ] as const;
 
-type FaqItem = {
+type HomeFaqItem = {
   question: string;
   answer: string;
   ctaHref?: string;
   ctaLabel?: string;
 };
 
-const faqItems: readonly FaqItem[] = [
+const faqItems: HomeFaqItem[] = [
   {
-    question: "How long will it take to build my project?",
+    question: "What type of work do you take on?",
     answer:
-      "Most focused service tasks are delivered in 1-3 days. If I am handling another active release, the schedule may shift slightly, but I always share timelines clearly before we start.",
+      "I work on full-stack applications, API integrations, internal tools, reservation systems, lead-generation platforms, and production improvements for existing codebases.",
   },
   {
-    question: "How much do you charge?",
+    question: "Do you handle infrastructure and deployment?",
     answer:
-      "Pricing is based on project scope, required timeline, and delivery complexity. I share a clear estimate after reviewing your goals, requirements, and technical constraints.",
+      "Yes. I regularly manage Linux VPS deployments, SSH access, Nginx configuration, SSL, domain setup, and production release checks.",
   },
   {
-    question: "What stack do you work with?",
+    question: "Can you work with an existing codebase?",
     answer:
-      "I work across modern frontend, backend, cloud, and deployment stacks, including multiple frameworks, databases, and servers. I adapt the stack to your business needs and team workflow.",
+      "Yes. I can audit, stabilize, extend, or refactor an existing system without forcing unnecessary rewrites.",
   },
   {
-    question: "Do you support after launch?",
+    question: "How can we start?",
     answer:
-      "Yes. I provide ongoing support for optimizations, fixes, and feature growth so your product remains stable, fast, and ready to scale.",
+      "Send a clear project inquiry through the contact form or email me directly. I will respond with the next practical step.",
+    ctaHref: "/contact",
+    ctaLabel: "Open Contact",
   },
-  {
-    question: "Do you provide AI-powered solutions?",
-    answer:
-      "Yes. I build AI-powered workflows and product features based on your needs, including automation with n8n, Zapier, API-driven integrations, and custom AI service implementation.",
-  },
-  {
-    question: "How can we contact you?",
-    answer:
-      "You can contact me directly by email at danielhachac@gmail.com or connect on LinkedIn for project and collaboration discussions.",
-    ctaHref: "mailto:danielhachac@gmail.com",
-    ctaLabel: "Email Now",
-  },
-  {
-    question: "Can you work with my existing codebase?",
-    answer:
-      "Absolutely. I can audit, improve, refactor, and scale existing products without forcing unnecessary rewrites, while keeping delivery fast and safe.",
-  },
-] as const;
+];
 
 type HomePageClientProps = {
-  initialRepos?: GithubRepo[];
-  initialPosts?: BlogPost[];
   initialHackatime?: HackatimePayload | null;
   initialGitHubOverview?: GitHubOverviewPayload | null;
 };
 
 export function HomePageClient({
-  initialRepos,
-  initialPosts,
   initialHackatime,
   initialGitHubOverview,
 }: HomePageClientProps) {
-  const hackatime = initialHackatime ?? null;
-  const githubOverview = initialGitHubOverview ?? null;
-  const focus = useHomeStore((state) => state.focus);
-  const setFocus = useHomeStore((state) => state.setFocus);
-
-  const focusItems = [
-    {
-      key: "Product",
-      title: "Product Engineering Services",
-      body: "I plan, build, and ship client-facing products from MVP to scale, turning business goals into stable features that improve conversion, retention, and revenue.",
-    },
-    {
-      key: "Open Source",
-      title: "Open Source and Dev Tooling",
-      body: "I create reusable components, OSS tools, and technical docs that help teams deliver faster with cleaner standards and lower maintenance cost.",
-    },
-    {
-      key: "AI",
-      title: "AI and Automation Delivery",
-      body: "I implement AI features and practical automations with n8n, Zapier, APIs, and custom workflows so operations stay fast, scalable, and reliable.",
-    },
-    {
-      key: "Services",
-      title: "Maintenance and Support Services",
-      body: "I provide ongoing maintenance, monitoring, release support, bug fixing, and feature upgrades so your product stays stable after launch.",
-    },
-  ] as const;
-
-  const visibleFocusItems =
-    focus === "All"
-      ? focusItems
-      : focusItems.filter((item) => item.key === focus);
-
   return (
     <div className="-mt-3 space-y-8 pb-16 sm:mt-0 sm:space-y-14">
       <StatsMarquee />
@@ -233,13 +126,13 @@ export function HomePageClient({
               {siteHost}
             </p>
             <div className="flex gap-2">
-              <span className="inline-flex h-5 w-5 items-center justify-center border-2 border-black bg-[#ffd146] text-[#5c3d00] font-black text-[10px] shadow-retro-sm sm:h-6 sm:w-6 sm:text-xs">
+              <span className="inline-flex h-5 w-5 items-center justify-center border-2 border-black bg-[#ffd146] text-[#5c3d00] text-[10px] font-black shadow-retro-sm sm:h-6 sm:w-6 sm:text-xs">
                 -
               </span>
-              <span className="inline-flex h-5 w-5 items-center justify-center border-2 border-black bg-[#52d46b] text-[#0d4f1a] font-black text-[10px] shadow-retro-sm sm:h-6 sm:w-6 sm:text-xs">
+              <span className="inline-flex h-5 w-5 items-center justify-center border-2 border-black bg-[#52d46b] text-[#0d4f1a] text-[10px] font-black shadow-retro-sm sm:h-6 sm:w-6 sm:text-xs">
                 +
               </span>
-              <span className="inline-flex h-5 w-5 items-center justify-center border-2 border-black bg-[#ff6e6e] text-[#6b1010] font-black text-[10px] shadow-retro-sm sm:h-6 sm:w-6 sm:text-xs">
+              <span className="inline-flex h-5 w-5 items-center justify-center border-2 border-black bg-[#ff6e6e] text-[#6b1010] text-[10px] font-black shadow-retro-sm sm:h-6 sm:w-6 sm:text-xs">
                 x
               </span>
             </div>
@@ -249,18 +142,18 @@ export function HomePageClient({
             <div className="order-2 space-y-4 md:order-1 md:space-y-6">
               <h1 className="font-display uppercase leading-[1.1]">
                 <span className="block text-[clamp(0.95rem,6vw,2.5rem)] sm:text-[clamp(1.7rem,5.2vw,3.8rem)]">
-                  Hey There! I&apos;M
+                  Full-Stack Delivery By
                 </span>
                 <span className="mt-1 block text-[clamp(1.05rem,8vw,3rem)] sm:text-[clamp(1.8rem,5.6vw,4.4rem)]">
                   <span className="retro-curve-underline">
-                    <HyperNameReveal text="Daniel Salas." />
+                    <HyperNameReveal text="Daniel Hachac Salas." />
                   </span>
                 </span>
               </h1>
               <p className="max-w-2xl border-l-4 border-black pl-3 text-xs font-medium leading-relaxed sm:pl-4 sm:text-sm md:text-lg">
-                I help founders and startups scale their business online through
-                developer-first tools, modern software solutions, and full-stack
-                product execution built for real growth.
+                I build maintainable applications, integrations, and VPS-backed
+                deployments for businesses that need practical execution, not
+                inflated promises.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button
@@ -268,7 +161,7 @@ export function HomePageClient({
                   asChild
                   className="w-full border-4 border-black px-4 py-2 text-sm font-black uppercase tracking-wide shadow-retro retro-press sm:w-auto sm:px-6 sm:py-3 sm:text-base"
                 >
-                  <Link href="mailto:danielhachac@gmail.com">Contact Me</Link>
+                  <Link href="/contact">Contact Me</Link>
                 </Button>
                 <Button
                   variant="secondary"
@@ -285,14 +178,10 @@ export function HomePageClient({
               <div className="border-4 border-black bg-card p-0">
                 <Image
                   src="/myprofile2.png"
-                  alt="Daniel Salas"
+                  alt="Daniel Hachac Salas"
                   width={384}
                   height={384}
-                  loading="eager"
                   priority
-                  fetchPriority="high"
-                  quality={75}
-                  sizes="(max-width: 640px) 224px, (max-width: 768px) 320px, 384px"
                   className="block h-full w-full object-cover"
                 />
               </div>
@@ -307,15 +196,6 @@ export function HomePageClient({
                   <Github className="h-4 w-4" />
                 </Link>
                 <Link
-                  href={xUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="retro-social-icon"
-                  aria-label="X profile"
-                >
-                  <Twitter className="h-4 w-4" />
-                </Link>
-                <Link
                   href={linkedinUrl}
                   target="_blank"
                   rel="noreferrer noopener"
@@ -323,6 +203,13 @@ export function HomePageClient({
                   aria-label="LinkedIn profile"
                 >
                   <Linkedin className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="mailto:danielhachac@gmail.com"
+                  className="retro-social-icon"
+                  aria-label="Email Daniel Hachac Salas"
+                >
+                  <Mail className="h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -332,65 +219,34 @@ export function HomePageClient({
 
       <section className="space-y-4" data-home-reveal>
         <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          Mission Control
+          Execution Snapshot
         </h2>
         <BentoGrid>
           <BentoCard className="min-h-48 h-full sm:col-span-1 lg:col-span-2">
             <p className="font-display text-xl uppercase sm:text-2xl">
-              Founder, Product and Growth Partner
+              Product and Platform Delivery
             </p>
             <p className="mt-3 font-medium leading-relaxed">
-              I work with founders, startups, and businesses to design and
-              execute digital products, improve UX, and deliver measurable
-              business growth through reliable engineering.
+              I build applications that balance user experience, maintainable
+              architecture, and practical business operations.
             </p>
           </BentoCard>
           <BentoCard className="min-h-48 h-full sm:col-span-1 lg:col-span-2">
             <p className="font-display text-xl uppercase">
-              Client Services and Product Delivery
+              APIs, Webhooks, and External Systems
             </p>
             <p className="mt-2 text-sm font-medium">
-              From planning to launch, I deliver web apps, product features,
-              integrations, and support systems tailored to customer and client
-              requirements.
+              I integrate payment flows, REST APIs, webhook processing, and
+              third-party services into stable backend workflows.
             </p>
           </BentoCard>
           <BentoCard className="min-h-48 h-full sm:col-span-1 lg:col-span-2">
             <p className="font-display text-xl uppercase">
-              Adaptive Tech Stack Execution
+              Linux VPS Deployment Ownership
             </p>
             <p className="mt-2 text-sm font-medium">
-              I adapt to your stack and infrastructure needs across frontend,
-              backend, cloud, AI, and automation for long-term maintainability.
-            </p>
-          </BentoCard>
-          <BentoCard className="min-h-48 h-full sm:col-span-1 lg:col-span-2">
-            <p className="font-display text-xl uppercase">
-              Maintenance and Support
-            </p>
-            <p className="mt-2 text-sm font-medium">
-              Post-launch, I handle updates, performance tuning, incident fixes,
-              and support workflows so clients get dependable long-term service.
-            </p>
-          </BentoCard>
-          <BentoCard className="min-h-48 h-full sm:col-span-1 lg:col-span-2">
-            <p className="font-display text-xl uppercase">
-              Performance and UX Optimization
-            </p>
-            <p className="mt-2 text-sm font-medium">
-              I improve speed, accessibility, and user flows with targeted UX
-              and performance upgrades that raise engagement and conversion
-              quality.
-            </p>
-          </BentoCard>
-          <BentoCard className="min-h-48 h-full sm:col-span-1 lg:col-span-2">
-            <p className="font-display text-xl uppercase">
-              Launch and Growth Operations
-            </p>
-            <p className="mt-2 text-sm font-medium">
-              I support launch operations, analytics setup, release workflows,
-              and post-launch growth execution so your team can scale with
-              confidence.
+              I manage deployment tasks such as SSH, Nginx, SSL, DNS, and
+              release validation for production-ready delivery.
             </p>
           </BentoCard>
         </BentoGrid>
@@ -398,66 +254,26 @@ export function HomePageClient({
 
       <section className="space-y-4" data-home-reveal>
         <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          Core Traits
+          Core Strengths
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {traits.map((trait) => (
+          {highlights.map((item) => (
             <Card
-              key={trait.title}
+              key={item.title}
               className="w-full border-4 border-black bg-card shadow-retro-md retro-press"
             >
               <Card.Header>
                 <Card.Title className="font-display text-2xl uppercase">
-                  {trait.title}
-                </Card.Title>
-              </Card.Header>
-              <Card.Content>
-                <p className="font-medium leading-relaxed">{trait.text}</p>
-              </Card.Content>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <div data-home-reveal>
-        <HomeDeliveryProcess />
-      </div>
-
-      <section className="space-y-4" data-home-reveal>
-        <div className="flex flex-wrap items-center gap-2">
-          {focusFilters.map((item) => (
-            <Button
-              key={item}
-              variant={focus === item ? "default" : "secondary"}
-              onClick={() => setFocus(item)}
-              className="border-4 border-black shadow-retro-sm uppercase"
-            >
-              {item}
-            </Button>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {visibleFocusItems.map((item) => (
-            <Card
-              key={item.key}
-              className="border-4 border-black bg-card shadow-retro-md"
-            >
-              <Card.Header>
-                <Card.Title className="font-display text-xl uppercase">
                   {item.title}
                 </Card.Title>
               </Card.Header>
               <Card.Content>
-                <p className="font-medium leading-relaxed">{item.body}</p>
+                <p className="font-medium leading-relaxed">{item.text}</p>
               </Card.Content>
             </Card>
           ))}
         </div>
       </section>
-
-      <div data-home-reveal>
-        <HomeEngagementModel />
-      </div>
 
       <section className="space-y-4" data-home-reveal>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -467,28 +283,37 @@ export function HomePageClient({
           <Button
             asChild
             variant="secondary"
-            className="w-full sm:w-auto uppercase"
+            className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
           >
             <Link href="/project">View All</Link>
           </Button>
         </div>
-        <ProjectsGrid compact limit={3} initialRepos={initialRepos} />
+        <ProjectsGrid compact limit={3} />
       </section>
 
       <section className="space-y-4" data-home-reveal>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="font-display text-3xl uppercase sm:text-4xl">
-            Latest Writing
+            Blog
           </h2>
           <Button
             asChild
             variant="secondary"
-            className="w-full sm:w-auto uppercase"
+            className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
           >
-            <Link href="/blog">View All</Link>
+            <Link href="/blog">Coming Soon</Link>
           </Button>
         </div>
-        <BlogGrid compact limit={3} initialPosts={initialPosts} />
+        <Card className="border-4 border-black bg-card shadow-retro-md">
+          <Card.Content className="space-y-3">
+            <p className="font-display text-2xl uppercase">Editorial Queue</p>
+            <p className="font-medium leading-relaxed">
+              The public blog is intentionally paused while the new admin
+              workflow is being prepared. The first entries will focus on real
+              deployment, integration, and product-delivery notes.
+            </p>
+          </Card.Content>
+        </Card>
       </section>
 
       <section className="space-y-4" data-home-reveal>
@@ -507,10 +332,10 @@ export function HomePageClient({
           </Button>
         </div>
         <p className="font-bold uppercase text-muted-foreground">
-          Followers, following, stars, forks, watchers, repositories, and GitHub
-          activity analytics.
+          Followers, repositories, language mix, and activity patterns from the
+          public GitHub profile.
         </p>
-        <GithubOverviewBento stats={githubOverview ?? null} />
+        <GithubOverviewBento stats={initialGitHubOverview ?? null} />
       </section>
 
       <section className="space-y-4" data-home-reveal>
@@ -526,133 +351,25 @@ export function HomePageClient({
             className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
           >
             <Link href={hackatimeUrl} target="_blank" rel="noreferrer noopener">
-              View{" "}
-              {process.env.NEXT_PUBLIC_CODING_STATS_PROVIDER === "hackatime"
-                ? "HackClub"
-                : "Wakatime"}{" "}
-              Profile
+              View Coding Profile
             </Link>
           </Button>
         </div>
-        <p className="font-bold uppercase text-muted-foreground">
-          {process.env.NEXT_PUBLIC_CODING_STATS_PROVIDER === "hackatime"
-            ? "Live coding insights from Hack Club for the last 7 days and total tracked development time."
-            : "Live coding insights from Wakatime for the last 7 days and total tracked development time."}
-        </p>
-        <HackatimeBento stats={hackatime ?? null} />
+        <HackatimeBento stats={initialHackatime ?? null} />
       </section>
+
+      <div data-home-reveal>
+        <RetroTerminalSection />
+      </div>
 
       <section className="space-y-4" data-home-reveal>
         <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          Testimonials
+          Connect Hub
         </h2>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          {[
-            {
-              quote:
-                "Shipped our startup MVP in record time with a clean architecture and no drama.",
-              by: "Founder, SaaS Startup",
-            },
-            {
-              quote:
-                "Strong ownership, fast delivery, and product decisions that improved conversion directly.",
-              by: "Product Lead, Global Agency",
-            },
-            {
-              quote:
-                "Open-source mindset plus business outcomes. Rare combination.",
-              by: "Engineering Manager",
-            },
-          ].map((item) => (
-            <Card
-              key={item.by}
-              className="flex h-full w-full flex-col border-4 border-black bg-card shadow-retro-md retro-press"
-            >
-              <Card.Content className="flex h-full min-h-44 flex-col gap-4">
-                <p className="text-lg font-bold leading-relaxed">
-                  &ldquo;{item.quote}&rdquo;
-                </p>
-                <p className="mt-auto text-sm font-black uppercase text-muted-foreground">
-                  {item.by}
-                </p>
-              </Card.Content>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-4" data-home-reveal>
-        <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          Donate & Sponsor
-        </h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="w-full border-4 border-black bg-card shadow-retro-md retro-press">
-            <Card.Header>
-              <Card.Title className="font-display text-2xl uppercase">
-                Support via GitHub Sponsors
-              </Card.Title>
-            </Card.Header>
-            <Card.Content className="space-y-4">
-              <p className="font-medium">
-                Fund open-source work and long-term product experiments through
-                GitHub Sponsors.
-              </p>
-              <Button asChild className="w-full sm:w-auto">
-                <Link
-                  href={sponsorUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  Sponsor on GitHub
-                </Link>
-              </Button>
-            </Card.Content>
-          </Card>
-
-          <Card className="w-full border-4 border-black bg-card shadow-retro-md retro-press">
-            <Card.Header>
-              <Card.Title className="font-display text-2xl uppercase">
-                Direct Donation
-              </Card.Title>
-            </Card.Header>
-            <Card.Content className="space-y-4">
-              <p className="font-medium">
-                If my content, products, or OSS work helped you, you can donate
-                directly here.
-              </p>
-              <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link
-                  href={donationUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  Donate Now
-                </Link>
-              </Button>
-            </Card.Content>
-          </Card>
-        </div>
-      </section>
-
-      <section className="space-y-4" data-home-reveal>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="font-display text-3xl uppercase sm:text-4xl">
-            Connect Hub
-          </h2>
-          <Button
-            asChild
-            variant="secondary"
-            className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
-          >
-            <Link href={linkHubUrl} target="_blank" rel="noreferrer noopener">
-              Open Link Hub
-            </Link>
-          </Button>
-        </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {links.slice(0, 9).map((item) => (
+          {links.map((item) => (
             <Card
-              key={item.href}
+              key={item.name}
               className="flex h-full w-full flex-col border-4 border-black bg-card shadow-retro-md retro-press"
             >
               <Card.Header className="min-h-36 flex-1">
@@ -670,8 +387,12 @@ export function HomePageClient({
                 >
                   <Link
                     href={item.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={
+                      item.href.startsWith("http")
+                        ? "noreferrer noopener"
+                        : undefined
+                    }
                   >
                     Open Link
                   </Link>
@@ -689,19 +410,19 @@ export function HomePageClient({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-3">
             <h2 className="font-display text-3xl uppercase text-primary-foreground sm:text-4xl md:text-5xl">
-              Let&apos;s Connect
+              Let&apos;s Build
             </h2>
             <p className="max-w-xl text-sm font-medium leading-relaxed text-primary-foreground/90 sm:text-base">
-              Ready to start your project, discuss an idea, or explore
-              collaboration? Send me your inquiry and I&apos;ll reply with a
-              clear execution plan.
+              If you need help shipping a feature, integrating a backend, or
+              getting a VPS deployment into production, send the project details
+              and I will respond with the next practical step.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               size="lg"
               asChild
-              className="w-full border-4 border-black bg-card text-card-foreground px-6 py-3 font-black uppercase shadow-retro retro-press sm:w-auto"
+              className="w-full border-4 border-black bg-card px-6 py-3 font-black uppercase text-card-foreground shadow-retro retro-press sm:w-auto"
             >
               <Link href="/contact">Contact Me</Link>
             </Button>
@@ -711,11 +432,7 @@ export function HomePageClient({
               asChild
               className="w-full border-4 border-black px-6 py-3 font-black uppercase shadow-retro retro-press sm:w-auto"
             >
-              <Link
-                href={linkedinUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
+              <Link href={linkedinUrl} target="_blank" rel="noreferrer noopener">
                 LinkedIn
               </Link>
             </Button>
@@ -751,18 +468,6 @@ export function HomePageClient({
           ))}
         </div>
       </section>
-
-      <div data-home-reveal>
-        <MorphScrollShowcase />
-      </div>
-
-      <div data-home-reveal>
-        <RetroCodeShowcase />
-      </div>
-
-      <div data-home-reveal>
-        <RetroTerminalSection />
-      </div>
     </div>
   );
 }

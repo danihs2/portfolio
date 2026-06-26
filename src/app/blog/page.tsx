@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { BlogPageClient } from "@/components/pages/blog-page-client";
-import { getBlogPosts } from "@/lib/server/portfolio-data";
 import { siteUrl } from "@/lib/site-config";
 
 const blogOgImageUrl = `${siteUrl}/blog/opengraph-image`;
@@ -8,20 +6,20 @@ const blogOgImageUrl = `${siteUrl}/blog/opengraph-image`;
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Aggregated blog posts from Hashnode, Dev.to, and Medium via SSR.",
+    "Blog publishing workspace for upcoming engineering and delivery notes.",
   alternates: {
     canonical: "/blog",
   },
   keywords: [
     "developer blog",
-    "engineering articles",
-    "next.js articles",
-    "open source writing",
+    "engineering notes",
+    "project breakdowns",
+    "delivery writeups",
   ],
   openGraph: {
-    title: "Blog by Daniel Salas",
+    title: "Blog | Daniel Hachac Salas",
     description:
-      "Engineering, product, and open-source articles aggregated from multiple platforms.",
+      "Coming soon: engineering notes, delivery breakdowns, and project writeups.",
     url: `${siteUrl}/blog`,
     type: "website",
     images: [
@@ -29,15 +27,15 @@ export const metadata: Metadata = {
         url: blogOgImageUrl,
         width: 1200,
         height: 630,
-        alt: "Daniel Salas Blog",
+        alt: "Daniel Hachac Salas Blog",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog by Daniel Salas",
+    title: "Blog | Daniel Hachac Salas",
     description:
-      "Engineering, product, and open-source articles aggregated from multiple platforms.",
+      "Coming soon: engineering notes, delivery breakdowns, and project writeups.",
     images: [blogOgImageUrl],
   },
 };
@@ -46,49 +44,14 @@ function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-async function safeFetch<T>(fallback: T, fn: () => Promise<T>): Promise<T> {
-  try {
-    return await fn();
-  } catch {
-    return fallback;
-  }
-}
-
-export default async function BlogPage() {
-  const posts = await safeFetch([], () => getBlogPosts());
-
+export default function BlogPage() {
   const blogJsonLd = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
+    "@type": "WebPage",
     name: "Blog",
     url: `${siteUrl}/blog`,
     description:
-      "Developer writing across product engineering and open source.",
-    mainEntity: {
-      "@type": "ItemList",
-      itemListElement: posts.map((post, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        url: post.url,
-        item: {
-          "@type": "BlogPosting",
-          headline: post.title,
-          description: post.excerpt,
-          datePublished: post.publishedAt,
-          author: {
-            "@type": "Person",
-            name: "Daniel Salas",
-            url: siteUrl,
-          },
-          publisher: {
-            "@type": "Person",
-            name: "Daniel Salas",
-            url: siteUrl,
-          },
-          keywords: post.tags.join(", "),
-        },
-      })),
-    },
+      "Coming soon page for upcoming engineering and delivery articles.",
   };
 
   const breadcrumbJsonLd = {
@@ -116,27 +79,28 @@ export default async function BlogPage() {
       <script type="application/ld+json">
         {serializeJsonLd(breadcrumbJsonLd)}
       </script>
+
       <section className="border-4 border-black bg-card p-4 shadow-retro-lg sm:p-6 md:p-8">
         <h1 className="font-pixel text-3xl uppercase sm:text-4xl md:text-5xl">
           Blog
         </h1>
         <p className="mt-3 max-w-3xl text-sm font-medium leading-relaxed sm:text-base">
-          Debug logs from product engineering, full stack architecture,
-          open-source, and practical AI experiments.
+          I am preparing a proper writing workflow from the new admin panel. The
+          public blog will open once the first set of production-ready posts is
+          published.
         </p>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="font-display text-2xl uppercase sm:text-3xl">
-          Browse Writing Index
+      <section className="border-4 border-black bg-primary p-6 shadow-retro-lg sm:p-8">
+        <h2 className="font-display text-3xl uppercase text-primary-foreground sm:text-4xl">
+          Coming Soon
         </h2>
-        <p className="text-sm font-medium leading-relaxed sm:text-base">
-          Search by topic, filter by source and tag, then sort by publish date
-          or reading time.
+        <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed text-primary-foreground/90 sm:text-base">
+          Upcoming entries will cover product delivery, API integrations, Linux
+          VPS operations, debugging notes, and project breakdowns from real
+          client work.
         </p>
       </section>
-
-      <BlogPageClient initialPosts={posts} />
     </div>
   );
 }

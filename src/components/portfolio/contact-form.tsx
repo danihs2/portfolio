@@ -350,8 +350,8 @@ export function ContactForm() {
         ) : null}
 
         <p className="border-4 border-primary bg-primary/10 px-3 py-2 text-xs font-bold uppercase sm:text-sm">
-          🔥 Claim the 20% off limited time summer offer by submitting your
-          inquiry now.
+          Submit a complete inquiry and I will respond with the clearest next
+          step for your project.
         </p>
 
         <div className="flex flex-col gap-3 sm:flex-row">

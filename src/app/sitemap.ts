@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/refund-policy",
     "/terms-of-service",
     "/delivery-policy",
-    "/cookies-policy",
   ].map((path) => ({
     url: `${siteUrl}${path}`,
     lastModified: "2026-05-02T16:00:00Z",

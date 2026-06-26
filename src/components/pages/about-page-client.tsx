@@ -10,12 +10,37 @@ import {
 } from "@/components/portfolio/about-timeline";
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
-import { Github, Linkedin, Twitter, Youtube } from "@/components/retroui/icons";
-import { githubUrl, linkedinUrl, xUrl, youtubeUrl } from "@/lib/site-config";
+import { Github, Linkedin, Mail } from "@/components/retroui/icons";
+import { githubUrl, linkedinUrl } from "@/lib/site-config";
 
 type AboutPageClientProps = {
   timelineItems: TimelineItem[];
 };
+
+const strengths = [
+  {
+    title: "Modern Application Delivery",
+    detail:
+      "I build web applications, REST APIs, and business workflows with a focus on maintainability, performance, and production readiness.",
+  },
+  {
+    title: "Backend and Integration Work",
+    detail:
+      "My work includes authentication flows, external APIs, webhooks, payment processes, and data models that support real operations.",
+  },
+  {
+    title: "Linux VPS Operations",
+    detail:
+      "I deploy and maintain products on Linux VPS infrastructure using SSH, SSL, domain configuration, DNS, and release validation.",
+  },
+] as const;
+
+const stackAreas = [
+  "Frontend: Next.js, React, TypeScript, Tailwind CSS",
+  "Backend: Node.js, Django, .NET, PHP Slim Framework, REST APIs",
+  "Data: PostgreSQL, Supabase, Firebase",
+  "Operations: Linux VPS, SSH, SSL, DNS, deployment workflows",
+] as const;
 
 export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -27,30 +52,11 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
     }
 
     const revealTargets = root.querySelectorAll("[data-about-reveal]");
-    const dnaTargets = root.querySelectorAll("[data-about-dna]");
-    const principleTargets = root.querySelectorAll("[data-about-principle]");
-
     animate(revealTargets, {
       opacity: [0, 1],
       translateY: [18, 0],
-      delay: (_: unknown, index: number) => index * 70,
+      delay: 70,
       duration: 320,
-      ease: "outQuad",
-    });
-
-    animate(dnaTargets, {
-      opacity: [0, 1],
-      translateY: [14, 0],
-      delay: (_: unknown, index: number) => 180 + index * 50,
-      duration: 280,
-      ease: "outQuad",
-    });
-
-    animate(principleTargets, {
-      opacity: [0, 1],
-      translateY: [14, 0],
-      delay: (_: unknown, index: number) => 320 + index * 50,
-      duration: 280,
       ease: "outQuad",
     });
   }, []);
@@ -66,7 +72,7 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
             <div className="border-4 border-black bg-card p-0">
               <Image
                 src="/myprofile.jpg"
-                alt="Daniel Salas"
+                alt="Daniel Hachac Salas"
                 width={420}
                 height={420}
                 className="block h-full w-full object-cover"
@@ -83,15 +89,6 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
                 <Github className="h-4 w-4" />
               </Link>
               <Link
-                href={xUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="retro-social-icon"
-                aria-label="X profile"
-              >
-                <Twitter className="h-4 w-4" />
-              </Link>
-              <Link
                 href={linkedinUrl}
                 target="_blank"
                 rel="noreferrer noopener"
@@ -101,13 +98,11 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
                 <Linkedin className="h-4 w-4" />
               </Link>
               <Link
-                href={youtubeUrl}
-                target="_blank"
-                rel="noreferrer noopener"
+                href="mailto:danielhachac@gmail.com"
                 className="retro-social-icon"
-                aria-label="YouTube profile"
+                aria-label="Email Daniel Hachac Salas"
               >
-                <Youtube className="h-4 w-4" />
+                <Mail className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -118,22 +113,21 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
             </h1>
             <div className="mt-5 space-y-4 text-sm font-medium leading-relaxed sm:text-base md:text-lg">
               <p>
-                Hey there, I&apos;m Daniel Salas, a self-taught full stack
-                developer, founder, entrepreneur, freelancer, and open-source
-                builder. I have been coding since childhood, and that early
-                curiosity became a long-term focus on building useful products
-                that solve real business problems.
+                I am a full-stack developer based in Mexico City, focused on
+                building maintainable software for real business use. My work
+                spans web applications, REST APIs, mobile-connected workflows,
+                integrations, and production deployments.
               </p>
               <p>
-                I help startups and businesses scale with developer-first tools,
-                robust product systems, and practical architecture that stays
-                reliable, maintainable, and outcome-driven as teams grow.
+                I have shipped projects with Next.js, Django, .NET, PHP,
+                Supabase, Firebase, and PostgreSQL, adapting the stack to the
+                product instead of forcing the product into a preferred stack.
               </p>
               <p>
-                I work across frontend, backend, and automation layers, explore
-                AI and machine learning in production-focused use cases, and
-                ship in public because measurable progress matters more than
-                hidden drafts.
+                I also handle Linux VPS deployment responsibilities, including
+                SSH access, SSL certificates, domains, DNS configuration, and
+                release checks so products can move from development to
+                production cleanly.
               </p>
             </div>
 
@@ -149,9 +143,7 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
                 variant="secondary"
                 className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
               >
-                <Link href="mailto:danielhachac@gmail.com">
-                  Business Inquiries
-                </Link>
+                <Link href="/contact">Start a Conversation</Link>
               </Button>
             </div>
           </div>
@@ -160,30 +152,13 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
 
       <section className="space-y-4" data-about-reveal>
         <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          Execution Snapshot
+          Professional Snapshot
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {[
-            {
-              title: "Product Engineering",
-              detail:
-                "Deliver end-to-end product execution from architecture to launch without sacrificing code quality.",
-            },
-            {
-              title: "AI Automation",
-              detail:
-                "Design and implement practical AI workflows that reduce repetitive operations and speed up teams.",
-            },
-            {
-              title: "Client Delivery",
-              detail:
-                "Translate goals into milestones, clear communication, and measurable outcomes with reliable iteration.",
-            },
-          ].map((item) => (
+          {strengths.map((item) => (
             <Card
               key={item.title}
               className="border-4 border-black bg-secondary shadow-retro-md"
-              data-about-principle
             >
               <Card.Header>
                 <Card.Title className="font-display text-2xl uppercase text-secondary-foreground">
@@ -202,45 +177,16 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
 
       <section className="space-y-4" data-about-reveal>
         <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          Developer DNA
+          Technical Focus
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {[
-            "Builder at heart: I design developer-first tools and reliable software systems that scale with confidence.",
-            "AI focused: I use ML and AI where they create practical value, not presentation-only hype.",
-            "Collaboration ready: open-source is my default mode and teamwork is my multiplier.",
-            "Tech versatile: I work with Python, JavaScript, Rust, and the stack your roadmap needs next.",
-          ].map((point) => (
+          {stackAreas.map((point) => (
             <Card
               key={point}
               className="border-4 border-black bg-card shadow-retro-md"
-              data-about-dna
             >
               <Card.Content>
                 <p className="font-medium leading-relaxed">{point}</p>
-              </Card.Content>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-4" data-about-reveal>
-        <h2 className="font-display text-3xl uppercase sm:text-4xl">
-          How I Work
-        </h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {[
-            "Start with clarity: define outcomes, constraints, and technical trade-offs early.",
-            "Build iteratively: ship in small reliable increments with measurable progress.",
-            "Document and transfer: leave systems maintainable so teams can move fast after handoff.",
-          ].map((item) => (
-            <Card
-              key={item}
-              className="border-4 border-black bg-card shadow-retro-md"
-              data-about-principle
-            >
-              <Card.Content>
-                <p className="font-medium leading-relaxed">{item}</p>
               </Card.Content>
             </Card>
           ))}
@@ -260,8 +206,12 @@ export function AboutPageClient({ timelineItems }: AboutPageClientProps) {
             variant="secondary"
             className="w-full border-4 border-black shadow-retro-sm sm:w-auto uppercase"
           >
-            <Link href={linkedinUrl} target="_blank" rel="noreferrer noopener">
-              View it on Linkedin
+            <Link
+              href="/CV_Daniel_Hachac_Salas_Harvard_EN.md"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              View CV Source
             </Link>
           </Button>
         </div>

@@ -1,44 +1,42 @@
 import type { Metadata } from "next";
 import { HomePageClient } from "@/components/portfolio/home-page-client";
 import {
-  getBlogPosts,
   getGithubOverview,
-  getGithubRepos,
   getHackatimeStats,
 } from "@/lib/server/portfolio-data";
 import {
-  donationUrl,
-  fiazDevUrl,
+  contactMailtoUrl,
   githubUrl,
   hackatimeUrl,
   linkedinUrl,
-  linkHubUrl,
   ogImageUrl,
   siteUrl,
-  sponsorUrl,
-  xUrl,
 } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Daniel Salas",
+    absolute: "Daniel Hachac Salas",
   },
   description:
-    "Daniel Salas portfolio: founder, entrepreneur, full stack developer and open-source contributor.",
+    "Full-stack developer building production-ready applications, integrations, and Linux VPS deployments.",
   alternates: {
     canonical: "/",
   },
   keywords: [
-    "Daniel Salas portfolio",
+    "Daniel Hachac Salas",
+    "Daniel Hachac",
+    "Daniel Salas",
+    "Hachac Salas",
+    "Daniel Hachac Salas portfolio",
     "full stack developer",
-    "startup engineer",
-    "open source projects",
-    "software services",
+    "VPS deployment engineer",
+    "REST API integrations",
+    "software delivery",
   ],
   openGraph: {
-    title: "Daniel Salas | Founder, Entrepreneur, Full Stack Developer",
+    title: "Daniel Hachac Salas | Full-Stack Developer",
     description:
-      "Business-first product engineering and open-source execution.",
+      "Production-focused full-stack development, integrations, and Linux VPS delivery.",
     url: siteUrl,
     type: "website",
     images: [
@@ -46,15 +44,15 @@ export const metadata: Metadata = {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "Daniel Salas Portfolio Home",
+        alt: "Daniel Hachac Salas Portfolio Home",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel Salas",
+    title: "Daniel Hachac Salas",
     description:
-      "Business-first product engineering and open-source execution.",
+      "Production-focused full-stack development, integrations, and Linux VPS delivery.",
     images: [ogImageUrl],
   },
 };
@@ -72,47 +70,38 @@ async function safeFetch<T>(fallback: T, fn: () => Promise<T>): Promise<T> {
 }
 
 export default async function HomePage() {
-  const [initialRepos, initialPosts, initialHackatime, initialGitHubOverview] =
-    await Promise.all([
-      safeFetch([], () => getGithubRepos()),
-      safeFetch([], () => getBlogPosts()),
-      safeFetch(null, () => getHackatimeStats()),
-      safeFetch(null, () => getGithubOverview()),
-    ]);
+  const [initialHackatime, initialGitHubOverview] = await Promise.all([
+    safeFetch(null, () => getHackatimeStats()),
+    safeFetch(null, () => getGithubOverview()),
+  ]);
 
   const homepageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Daniel Salas Portfolio",
+    name: "Daniel Hachac Salas Portfolio",
     url: siteUrl,
-    description: "Founder, entrepreneur, and full stack developer portfolio.",
+    description:
+      "Full-stack developer portfolio focused on shipping production-ready software.",
     mainEntity: {
       "@type": "Person",
-      name: "Daniel Salas",
+      name: "Daniel Hachac Salas",
       url: siteUrl,
-      sameAs: [
-        githubUrl,
-        linkedinUrl,
-        xUrl,
-        hackatimeUrl,
-        linkHubUrl,
-        fiazDevUrl,
-      ],
+      sameAs: [githubUrl, linkedinUrl, hackatimeUrl, contactMailtoUrl],
     },
-    significantLink: [linkHubUrl, sponsorUrl, donationUrl, fiazDevUrl],
+    significantLink: [githubUrl, linkedinUrl, `${siteUrl}/project`, `${siteUrl}/contact`],
   };
 
   const profileStatsJsonLd = initialGitHubOverview
     ? {
         "@context": "https://schema.org",
         "@type": "Dataset",
-        name: "Daniel Salas GitHub Portfolio Stats",
+        name: "Daniel Hachac Salas GitHub Portfolio Stats",
         description:
           "Live GitHub repository, stars, forks, and watcher metrics.",
         license: "https://opensource.org/licenses/MIT",
         creator: {
           "@type": "Person",
-          name: "Daniel Salas",
+          name: "Daniel Hachac Salas",
         },
         distribution: {
           "@type": "DataDownload",
@@ -154,8 +143,6 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <HomePageClient
-        initialRepos={initialRepos}
-        initialPosts={initialPosts}
         initialHackatime={initialHackatime}
         initialGitHubOverview={initialGitHubOverview}
       />
