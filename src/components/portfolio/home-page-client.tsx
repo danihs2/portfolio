@@ -146,7 +146,7 @@ export function HomePageClient({
                 </span>
                 <span className="mt-1 block text-[clamp(1.05rem,8vw,3rem)] sm:text-[clamp(1.8rem,5.6vw,4.4rem)]">
                   <span className="retro-curve-underline">
-                    <HyperNameReveal text="Daniel Hachac Salas." />
+                    <HyperNameReveal text="Daniel Salas." />
                   </span>
                 </span>
               </h1>

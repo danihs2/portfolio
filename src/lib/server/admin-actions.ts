@@ -76,7 +76,7 @@ export async function createBlogPostAction(formData: FormData) {
     redirect("/admin/blog/new?error=invalid_post");
   }
 
-  await prisma.blogPost.create({
+  const createdPost = await prisma.blogPost.create({
     data: {
       ...parsed.data,
       publishedAt:
@@ -86,6 +86,8 @@ export async function createBlogPostAction(formData: FormData) {
   });
 
   revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${createdPost.slug}`);
   redirect("/admin/blog");
 }
 
@@ -115,6 +117,9 @@ export async function updateBlogPostAction(formData: FormData) {
   });
 
   revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${existing.slug}`);
+  revalidatePath(`/blog/${parsed.data.slug}`);
   redirect(`/admin/blog/${id}?saved=1`);
 }
 
@@ -123,11 +128,21 @@ export async function deleteBlogPostAction(formData: FormData) {
   const id = String(formData.get("id") ?? "").trim();
 
   if (id) {
+    const existing = await prisma.blogPost.findUnique({
+      where: { id },
+      select: { slug: true },
+    });
+
     await prisma.blogPost.delete({
       where: { id },
     });
+
+    if (existing) {
+      revalidatePath(`/blog/${existing.slug}`);
+    }
   }
 
   revalidatePath("/admin/blog");
+  revalidatePath("/blog");
   redirect("/admin/blog");
 }

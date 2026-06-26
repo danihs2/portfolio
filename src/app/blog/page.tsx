@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Card } from "@/components/retroui/Card";
+import { prisma } from "@/lib/server/prisma";
 import { siteUrl } from "@/lib/site-config";
+
+export const revalidate = 60;
 
 const blogOgImageUrl = `${siteUrl}/blog/opengraph-image`;
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Blog publishing workspace for upcoming engineering and delivery notes.",
+    "Engineering notes, delivery breakdowns, and project writeups by Daniel Hachac Salas.",
   alternates: {
     canonical: "/blog",
   },
   keywords: [
+    "Daniel Hachac Salas blog",
+    "Daniel Hachac",
+    "Daniel Salas",
     "developer blog",
     "engineering notes",
     "project breakdowns",
@@ -19,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Blog | Daniel Hachac Salas",
     description:
-      "Coming soon: engineering notes, delivery breakdowns, and project writeups.",
+      "Engineering notes, delivery breakdowns, and project writeups.",
     url: `${siteUrl}/blog`,
     type: "website",
     images: [
@@ -35,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Blog | Daniel Hachac Salas",
     description:
-      "Coming soon: engineering notes, delivery breakdowns, and project writeups.",
+      "Engineering notes, delivery breakdowns, and project writeups.",
     images: [blogOgImageUrl],
   },
 };
@@ -44,14 +52,64 @@ function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-export default function BlogPage() {
+async function getPublishedPosts() {
+  if (!process.env.DATABASE_URL) {
+    return [];
+  }
+
+  return prisma.blogPost.findMany({
+    where: { status: "PUBLISHED" },
+    orderBy: [{ publishedAt: "desc" }, { updatedAt: "desc" }],
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      publishedAt: true,
+      updatedAt: true,
+    },
+  });
+}
+
+function formatDate(value: Date | null) {
+  if (!value) {
+    return "Draft";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+  }).format(value);
+}
+
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
+
   const blogJsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "CollectionPage",
     name: "Blog",
     url: `${siteUrl}/blog`,
     description:
-      "Coming soon page for upcoming engineering and delivery articles.",
+      "Published engineering notes and project writeups by Daniel Hachac Salas.",
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: posts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${siteUrl}/blog/${post.slug}`,
+        item: {
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.excerpt,
+          datePublished: post.publishedAt?.toISOString() ?? post.updatedAt.toISOString(),
+          author: {
+            "@type": "Person",
+            name: "Daniel Hachac Salas",
+            url: siteUrl,
+          },
+        },
+      })),
+    },
   };
 
   const breadcrumbJsonLd = {
@@ -85,22 +143,54 @@ export default function BlogPage() {
           Blog
         </h1>
         <p className="mt-3 max-w-3xl text-sm font-medium leading-relaxed sm:text-base">
-          I am preparing a proper writing workflow from the new admin panel. The
-          public blog will open once the first set of production-ready posts is
-          published.
+          Notes on engineering delivery, integrations, Linux VPS operations,
+          debugging work, and practical product execution.
         </p>
       </section>
 
-      <section className="border-4 border-black bg-primary p-6 shadow-retro-lg sm:p-8">
-        <h2 className="font-display text-3xl uppercase text-primary-foreground sm:text-4xl">
-          Coming Soon
-        </h2>
-        <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed text-primary-foreground/90 sm:text-base">
-          Upcoming entries will cover product delivery, API integrations, Linux
-          VPS operations, debugging notes, and project breakdowns from real
-          client work.
-        </p>
-      </section>
+      {posts.length > 0 ? (
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {posts.map((post) => (
+            <Card
+              key={post.id}
+              className="border-4 border-black bg-card shadow-retro-md"
+            >
+              <Card.Content className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="retro-badge text-[10px] sm:text-xs">
+                    Published
+                  </span>
+                  <span className="text-xs font-black uppercase text-muted-foreground">
+                    {formatDate(post.publishedAt)}
+                  </span>
+                </div>
+                <h2 className="font-display text-2xl uppercase">
+                  <Link href={`/blog/${post.slug}`} className="hover:underline">
+                    {post.title}
+                  </Link>
+                </h2>
+                <p className="font-medium leading-relaxed">{post.excerpt}</p>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="inline-flex border-4 border-black bg-primary px-4 py-2 text-sm font-black uppercase text-primary-foreground shadow-retro-sm transition hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                >
+                  Read Entry
+                </Link>
+              </Card.Content>
+            </Card>
+          ))}
+        </section>
+      ) : (
+        <section className="border-4 border-black bg-primary p-6 shadow-retro-lg sm:p-8">
+          <h2 className="font-display text-3xl uppercase text-primary-foreground sm:text-4xl">
+            No Published Entries Yet
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed text-primary-foreground/90 sm:text-base">
+            The admin workflow is already enabled. As soon as a post is created
+            and marked as published from the panel, it will appear here.
+          </p>
+        </section>
+      )}
     </div>
   );
 }

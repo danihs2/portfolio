@@ -61,6 +61,21 @@ export default async function AdminBlogPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
+                  {post.status === "PUBLISHED" ? (
+                    <Button
+                      asChild
+                      variant="secondary"
+                      className="border-4 border-black shadow-retro-sm uppercase"
+                    >
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        View Live
+                      </Link>
+                    </Button>
+                  ) : null}
                   <Button
                     asChild
                     variant="secondary"
