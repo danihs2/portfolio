@@ -3,8 +3,6 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/server/prisma";
 import { siteUrl } from "@/lib/site-config";
 
-export const revalidate = 60;
-
 type BlogPostPageProps = {
   params: Promise<{
     slug: string;

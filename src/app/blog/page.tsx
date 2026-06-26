@@ -4,8 +4,6 @@ import { Card } from "@/components/retroui/Card";
 import { prisma } from "@/lib/server/prisma";
 import { siteUrl } from "@/lib/site-config";
 
-export const revalidate = 60;
-
 const blogOgImageUrl = `${siteUrl}/blog/opengraph-image`;
 
 export const metadata: Metadata = {
