@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 import { siteUrl } from "@/lib/site-config";
 
@@ -10,7 +11,7 @@ type BlogPostPageProps = {
 };
 
 async function getPublishedPost(slug: string) {
-  if (!process.env.DATABASE_URL) {
+  if (!hasDatabaseUrl()) {
     return null;
   }
 

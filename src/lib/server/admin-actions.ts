@@ -9,6 +9,7 @@ import {
   requireAdmin,
   verifyPassword,
 } from "@/lib/server/auth";
+import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 
 const loginSchema = z.object({
@@ -42,6 +43,10 @@ function normalizePostInput(formData: FormData) {
 }
 
 export async function loginAdminAction(formData: FormData) {
+  if (!hasDatabaseUrl()) {
+    redirect("/admin/login?error=database_unavailable");
+  }
+
   const parsed = loginSchema.safeParse({
     email: String(formData.get("email") ?? "").trim().toLowerCase(),
     password: String(formData.get("password") ?? ""),

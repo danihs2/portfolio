@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Card } from "@/components/retroui/Card";
+import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 import { siteUrl } from "@/lib/site-config";
 
@@ -51,7 +52,7 @@ function serializeJsonLd(value: unknown): string {
 }
 
 async function getPublishedPosts() {
-  if (!process.env.DATABASE_URL) {
+  if (!hasDatabaseUrl()) {
     return [];
   }
 

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Card } from "@/components/retroui/Card";
 import { updateBlogPostAction } from "@/lib/server/admin-actions";
+import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 
 type AdminEditBlogPostPageProps = {
@@ -12,7 +13,7 @@ type AdminEditBlogPostPageProps = {
 export default async function AdminEditBlogPostPage({
   params,
 }: AdminEditBlogPostPageProps) {
-  if (!process.env.DATABASE_URL) {
+  if (!hasDatabaseUrl()) {
     return null;
   }
 

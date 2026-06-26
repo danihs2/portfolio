@@ -1,4 +1,5 @@
 import { Card } from "@/components/retroui/Card";
+import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 
 function formatDate(value: Date) {
@@ -9,7 +10,7 @@ function formatDate(value: Date) {
 }
 
 export default async function AdminContactsPage() {
-  if (!process.env.DATABASE_URL) {
+  if (!hasDatabaseUrl()) {
     return null;
   }
 

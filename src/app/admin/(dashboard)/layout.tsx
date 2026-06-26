@@ -3,13 +3,14 @@ import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { logoutAdminAction } from "@/lib/server/admin-actions";
 import { requireAdmin } from "@/lib/server/auth";
+import { hasDatabaseUrl } from "@/lib/server/database";
 
 export default async function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  if (!process.env.DATABASE_URL) {
+  if (!hasDatabaseUrl()) {
     return (
       <div className="space-y-6 pb-16">
         <Card className="border-4 border-black bg-card shadow-retro-lg">

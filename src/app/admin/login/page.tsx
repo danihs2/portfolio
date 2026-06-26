@@ -4,6 +4,7 @@ import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { getCurrentAdminUser } from "@/lib/server/auth";
 import { loginAdminAction } from "@/lib/server/admin-actions";
+import { hasDatabaseUrl } from "@/lib/server/database";
 
 type LoginPageProps = {
   searchParams: Promise<{
@@ -12,6 +13,7 @@ type LoginPageProps = {
 };
 
 export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
+  const isDatabaseConfigured = hasDatabaseUrl();
   const user = await getCurrentAdminUser();
   if (user) {
     redirect("/admin");
@@ -19,6 +21,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
 
   const params = await searchParams;
   const showError = params.error === "invalid_credentials";
+  const showDatabaseError = params.error === "database_unavailable";
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-xl items-center">
@@ -33,6 +36,12 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
           </Card.Description>
         </Card.Header>
         <Card.Content className="space-y-4">
+          {showDatabaseError || !isDatabaseConfigured ? (
+            <div className="border-4 border-black bg-destructive px-4 py-3 text-sm font-black uppercase text-destructive-foreground shadow-retro-sm">
+              The admin panel requires DATABASE_URL to be available at runtime.
+            </div>
+          ) : null}
+
           {showError ? (
             <div className="border-4 border-black bg-destructive px-4 py-3 text-sm font-black uppercase text-destructive-foreground shadow-retro-sm">
               Invalid email or password.
@@ -64,6 +73,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
             <Button
               type="submit"
               className="w-full border-4 border-black shadow-retro-sm uppercase"
+              disabled={!isDatabaseConfigured}
             >
               Sign In
             </Button>

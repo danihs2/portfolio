@@ -2,6 +2,7 @@ import "server-only";
 import { createHash, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 
 const ADMIN_SESSION_COOKIE = "portfolio_admin_session";
@@ -34,6 +35,10 @@ export function verifyPassword(password: string, hashedPassword: string) {
 }
 
 export async function createAdminSession(userId: string) {
+  if (!hasDatabaseUrl()) {
+    throw new Error("DATABASE_URL is not configured.");
+  }
+
   const token = randomBytes(32).toString("hex");
   const tokenHash = sha256(token);
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
@@ -60,7 +65,7 @@ export async function destroyAdminSession() {
   const cookieStore = await cookies();
   const token = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
 
-  if (token) {
+  if (token && hasDatabaseUrl()) {
     await prisma.adminSession.deleteMany({
       where: {
         tokenHash: sha256(token),
@@ -72,6 +77,10 @@ export async function destroyAdminSession() {
 }
 
 export async function getCurrentAdminUser() {
+  if (!hasDatabaseUrl()) {
+    return null;
+  }
+
   const cookieStore = await cookies();
   const token = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
 
