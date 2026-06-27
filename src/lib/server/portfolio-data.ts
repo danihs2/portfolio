@@ -1,5 +1,4 @@
 import "server-only";
-import { cacheLife } from "next/cache";
 import type {
   GitHubOverviewPayload,
   GithubRepo,
@@ -95,8 +94,6 @@ const DEFAULT_GITHUB_USER =
 const GITHUB_CACHE_REVALIDATE_SECONDS = 60 * 60 * 12;
 
 async function getCurrentTimestamp() {
-  "use cache";
-  cacheLife("hours");
   return Date.now();
 }
 
