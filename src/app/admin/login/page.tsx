@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
@@ -13,6 +15,16 @@ type LoginPageProps = {
 };
 
 export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
+  return (
+    <Suspense fallback={<AdminLoginFallback />}>
+      <AdminLoginContent searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function AdminLoginContent({ searchParams }: LoginPageProps) {
+  await connection();
+
   const isDatabaseConfigured = hasDatabaseUrl();
   const user = await getCurrentAdminUser();
   if (user) {
@@ -86,6 +98,23 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
             Back to portfolio
           </Link>
         </Card.Content>
+      </Card>
+    </div>
+  );
+}
+
+function AdminLoginFallback() {
+  return (
+    <div className="mx-auto flex min-h-[70vh] max-w-xl items-center">
+      <Card className="w-full border-4 border-black bg-card shadow-retro-lg">
+        <Card.Header>
+          <Card.Title className="font-display text-3xl uppercase">
+            Admin Login
+          </Card.Title>
+          <Card.Description className="text-sm font-medium leading-relaxed sm:text-base">
+            Loading admin login...
+          </Card.Description>
+        </Card.Header>
       </Card>
     </div>
   );
