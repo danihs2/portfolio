@@ -1,31 +1,17 @@
-import { Suspense } from "react";
 import Link from "next/link";
-import { connection } from "next/server";
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { logoutAdminAction } from "@/lib/server/admin-actions";
 import { requireAdmin } from "@/lib/server/auth";
 import { hasDatabaseUrl } from "@/lib/server/database";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <Suspense fallback={<AdminDashboardFallback />}>
-      <AdminDashboardContent>{children}</AdminDashboardContent>
-    </Suspense>
-  );
-}
-
-async function AdminDashboardContent({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  await connection();
-
   if (!hasDatabaseUrl()) {
     return (
       <div className="space-y-6 pb-16">
@@ -90,21 +76,6 @@ async function AdminDashboardContent({
       </Card>
 
       {children}
-    </div>
-  );
-}
-
-function AdminDashboardFallback() {
-  return (
-    <div className="space-y-6 pb-16">
-      <Card className="border-4 border-black bg-card shadow-retro-lg">
-        <Card.Content className="space-y-3">
-          <p className="font-display text-3xl uppercase">Admin Console</p>
-          <p className="font-medium leading-relaxed">
-            Loading admin session...
-          </p>
-        </Card.Content>
-      </Card>
     </div>
   );
 }
