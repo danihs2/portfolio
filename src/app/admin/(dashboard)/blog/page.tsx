@@ -51,6 +51,14 @@ export default async function AdminBlogPage() {
                     <span className="retro-badge text-[10px] sm:text-xs">
                       {post.slug}
                     </span>
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="retro-badge text-[10px] sm:text-xs"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                   <p className="font-display text-2xl uppercase">
                     {post.title}

@@ -108,12 +108,23 @@ exports.Prisma.AdminSessionScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
 exports.Prisma.BlogPostScalarFieldEnum = {
   id: 'id',
   title: 'title',
   slug: 'slug',
   excerpt: 'excerpt',
   content: 'content',
+  tags: 'tags',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -156,6 +167,7 @@ exports.BlogPostStatus = exports.$Enums.BlogPostStatus = {
 exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   AdminSession: 'AdminSession',
+  PasswordResetToken: 'PasswordResetToken',
   BlogPost: 'BlogPost',
   ContactSubmission: 'ContactSubmission'
 };
@@ -170,7 +182,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/daniel/Escritorio/personal-projects/portfolio/src/generated/prisma",
+      "value": "/var/www/portfolio/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -184,11 +196,12 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/daniel/Escritorio/personal-projects/portfolio/prisma/schema.prisma",
+    "sourceFilePath": "/var/www/portfolio/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.16.2",
@@ -206,13 +219,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum BlogPostStatus {\n  DRAFT\n  PUBLISHED\n}\n\nmodel AdminUser {\n  id           String         @id @default(cuid())\n  email        String         @unique\n  passwordHash String\n  createdAt    DateTime       @default(now())\n  updatedAt    DateTime       @updatedAt\n  posts        BlogPost[]\n  sessions     AdminSession[]\n}\n\nmodel AdminSession {\n  id        String    @id @default(cuid())\n  tokenHash String    @unique\n  expiresAt DateTime\n  createdAt DateTime  @default(now())\n  userId    String\n  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([expiresAt])\n}\n\nmodel BlogPost {\n  id          String         @id @default(cuid())\n  title       String\n  slug        String         @unique\n  excerpt     String\n  content     String\n  status      BlogPostStatus @default(DRAFT)\n  createdAt   DateTime       @default(now())\n  updatedAt   DateTime       @updatedAt\n  publishedAt DateTime?\n  authorId    String\n  author      AdminUser      @relation(fields: [authorId], references: [id], onDelete: Restrict)\n\n  @@index([status, updatedAt])\n}\n\nmodel ContactSubmission {\n  id                String   @id @default(cuid())\n  name              String\n  email             String\n  country           String\n  phone             String?\n  businessInquiry   String\n  projectDetails    String\n  expectedStartDate String?\n  expectedEndDate   String?\n  createdAt         DateTime @default(now())\n\n  @@index([createdAt])\n  @@index([email])\n}\n",
-  "inlineSchemaHash": "067516541472cfa1311dd76c370a10a40cb731e6b1d93725d3fb148bbab25e69",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum BlogPostStatus {\n  DRAFT\n  PUBLISHED\n}\n\nmodel AdminUser {\n  id                  String               @id @default(cuid())\n  email               String               @unique\n  passwordHash        String\n  createdAt           DateTime             @default(now())\n  updatedAt           DateTime             @updatedAt\n  posts               BlogPost[]\n  sessions            AdminSession[]\n  passwordResetTokens PasswordResetToken[]\n}\n\nmodel AdminSession {\n  id        String    @id @default(cuid())\n  tokenHash String    @unique\n  expiresAt DateTime\n  createdAt DateTime  @default(now())\n  userId    String\n  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([expiresAt])\n}\n\nmodel PasswordResetToken {\n  id         String    @id @default(cuid())\n  tokenHash  String\n  expiresAt  DateTime\n  attempts   Int       @default(0)\n  verifiedAt DateTime?\n  createdAt  DateTime  @default(now())\n  userId     String\n  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([expiresAt])\n}\n\nmodel BlogPost {\n  id          String         @id @default(cuid())\n  title       String\n  slug        String         @unique\n  excerpt     String\n  content     String\n  tags        String[]       @default([])\n  status      BlogPostStatus @default(DRAFT)\n  createdAt   DateTime       @default(now())\n  updatedAt   DateTime       @updatedAt\n  publishedAt DateTime?\n  authorId    String\n  author      AdminUser      @relation(fields: [authorId], references: [id], onDelete: Restrict)\n\n  @@index([status, updatedAt])\n}\n\nmodel ContactSubmission {\n  id                String   @id @default(cuid())\n  name              String\n  email             String\n  country           String\n  phone             String?\n  businessInquiry   String\n  projectDetails    String\n  expectedStartDate String?\n  expectedEndDate   String?\n  createdAt         DateTime @default(now())\n\n  @@index([createdAt])\n  @@index([email])\n}\n",
+  "inlineSchemaHash": "689aea7a71c0d7d93c0bd32a70e8a6c20a757581b7ced6dac2f8510c2d789b20",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"posts\",\"kind\":\"object\",\"type\":\"BlogPost\",\"relationName\":\"AdminUserToBlogPost\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"AdminSession\",\"relationName\":\"AdminSessionToAdminUser\"}],\"dbName\":null},\"AdminSession\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"AdminUser\",\"relationName\":\"AdminSessionToAdminUser\"}],\"dbName\":null},\"BlogPost\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"excerpt\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"BlogPostStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"publishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"authorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"author\",\"kind\":\"object\",\"type\":\"AdminUser\",\"relationName\":\"AdminUserToBlogPost\"}],\"dbName\":null},\"ContactSubmission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"businessInquiry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectDetails\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expectedStartDate\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expectedEndDate\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"AdminUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"posts\",\"kind\":\"object\",\"type\":\"BlogPost\",\"relationName\":\"AdminUserToBlogPost\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"AdminSession\",\"relationName\":\"AdminSessionToAdminUser\"},{\"name\":\"passwordResetTokens\",\"kind\":\"object\",\"type\":\"PasswordResetToken\",\"relationName\":\"AdminUserToPasswordResetToken\"}],\"dbName\":null},\"AdminSession\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"AdminUser\",\"relationName\":\"AdminSessionToAdminUser\"}],\"dbName\":null},\"PasswordResetToken\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"attempts\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"verifiedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"AdminUser\",\"relationName\":\"AdminUserToPasswordResetToken\"}],\"dbName\":null},\"BlogPost\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"excerpt\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tags\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"BlogPostStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"publishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"authorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"author\",\"kind\":\"object\",\"type\":\"AdminUser\",\"relationName\":\"AdminUserToBlogPost\"}],\"dbName\":null},\"ContactSubmission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"businessInquiry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectDetails\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expectedStartDate\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expectedEndDate\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

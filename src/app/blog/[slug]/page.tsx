@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { MarkdownContent } from "@/components/blog/MarkdownContent";
 import { hasDatabaseUrl } from "@/lib/server/database";
 import { prisma } from "@/lib/server/prisma";
 import { siteUrl } from "@/lib/site-config";
@@ -55,6 +56,7 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: post.tags,
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
@@ -89,6 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
+    keywords: post.tags,
     datePublished: post.publishedAt?.toISOString() ?? post.updatedAt.toISOString(),
     dateModified: post.updatedAt.toISOString(),
     author: {
@@ -118,12 +121,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <p className="mt-4 max-w-3xl text-sm font-medium leading-relaxed sm:text-base">
           {post.excerpt}
         </p>
+        {post.tags.length > 0 ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <span key={tag} className="retro-badge text-[10px] sm:text-xs">
+                {tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <section className="border-4 border-black bg-card p-4 shadow-retro-lg sm:p-6 md:p-8">
-        <div className="prose prose-neutral max-w-none whitespace-pre-wrap font-medium leading-relaxed dark:prose-invert">
-          {post.content}
-        </div>
+        <MarkdownContent content={post.content} />
       </section>
     </article>
   );

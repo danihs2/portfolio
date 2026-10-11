@@ -23,9 +23,7 @@ async function main() {
 
   const admin = await prisma.adminUser.upsert({
     where: { email },
-    update: {
-      passwordHash,
-    },
+    update: {},
     create: {
       email,
       passwordHash,
@@ -48,7 +46,10 @@ async function main() {
     });
   }
 
-  const fingerprint = createHash("sha256").update(email).digest("hex").slice(0, 12);
+  const fingerprint = createHash("sha256")
+    .update(email)
+    .digest("hex")
+    .slice(0, 12);
   console.log(`Seed completed for admin ${email} (${fingerprint})`);
 }
 

@@ -32,6 +32,8 @@ This means each deploy will:
 - keep the seeded draft post available for admin verification
 
 The seed is safe to rerun because it uses `upsert` for the admin account.
+It creates the initial password only and does not overwrite a password changed
+through the recovery flow.
 
 ## Local Setup
 
@@ -70,6 +72,9 @@ After the first successful deploy:
 - Use the password from `ADMIN_SEED_PASSWORD`
 
 By default, the expected email is `danielhachac@gmail.com`.
+
+Use **Forgot your password?** on the login page to receive a six-digit reset
+code at the full admin email address. The code expires after 5 minutes.
 
 ## Contact Form Flow
 

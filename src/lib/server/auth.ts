@@ -1,11 +1,23 @@
 import "server-only";
-import { createHash, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import {
+  createHash,
+  randomBytes,
+  scryptSync,
+  timingSafeEqual,
+} from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hasDatabaseUrl } from "@/lib/server/database";
+import {
+  hashPasswordResetSecret,
+  isPasswordResetExpired,
+  matchesPasswordResetSecret,
+  PASSWORD_RESET_TTL_MS,
+} from "@/lib/server/password-reset";
 import { prisma } from "@/lib/server/prisma";
 
 const ADMIN_SESSION_COOKIE = "portfolio_admin_session";
+const PASSWORD_RESET_COOKIE = "portfolio_password_reset";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 14;
 
 function sha256(value: string) {
@@ -74,6 +86,71 @@ export async function destroyAdminSession() {
   }
 
   cookieStore.delete(ADMIN_SESSION_COOKIE);
+}
+
+export async function createPasswordResetGrant(resetId: string) {
+  const secret = randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MS);
+
+  await prisma.passwordResetToken.update({
+    where: { id: resetId },
+    data: {
+      tokenHash: hashPasswordResetSecret(secret),
+      verifiedAt: new Date(),
+      expiresAt,
+    },
+  });
+
+  const cookieStore = await cookies();
+  cookieStore.set(PASSWORD_RESET_COOKIE, `${resetId}:${secret}`, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    expires: expiresAt,
+    path: "/admin/forgot-password",
+  });
+}
+
+export async function resetPasswordWithGrant(password: string) {
+  const cookieStore = await cookies();
+  const [resetId, secret] =
+    cookieStore.get(PASSWORD_RESET_COOKIE)?.value.split(":") ?? [];
+
+  if (!resetId || !secret) {
+    cookieStore.delete(PASSWORD_RESET_COOKIE);
+    return false;
+  }
+
+  const reset = await prisma.$transaction(async (transaction) => {
+    const token = await transaction.passwordResetToken.findUnique({
+      where: { id: resetId },
+    });
+
+    if (
+      !token?.verifiedAt ||
+      isPasswordResetExpired(token.expiresAt) ||
+      !matchesPasswordResetSecret(secret, token.tokenHash)
+    ) {
+      return false;
+    }
+
+    await transaction.passwordResetToken.delete({ where: { id: token.id } });
+    await transaction.adminUser.update({
+      where: { id: token.userId },
+      data: { passwordHash: hashPassword(password) },
+    });
+    await transaction.adminSession.deleteMany({
+      where: { userId: token.userId },
+    });
+    await transaction.passwordResetToken.deleteMany({
+      where: { userId: token.userId },
+    });
+
+    return true;
+  });
+
+  cookieStore.delete(PASSWORD_RESET_COOKIE);
+  return reset;
 }
 
 export async function getCurrentAdminUser() {

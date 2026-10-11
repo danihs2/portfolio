@@ -14,13 +14,14 @@ enum BlogPostStatus {
 }
 
 model AdminUser {
-  id           String         @id @default(cuid())
-  email        String         @unique
-  passwordHash String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  posts        BlogPost[]
-  sessions     AdminSession[]
+  id                  String               @id @default(cuid())
+  email               String               @unique
+  passwordHash        String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  posts               BlogPost[]
+  sessions            AdminSession[]
+  passwordResetTokens PasswordResetToken[]
 }
 
 model AdminSession {
@@ -35,12 +36,27 @@ model AdminSession {
   @@index([expiresAt])
 }
 
+model PasswordResetToken {
+  id         String    @id @default(cuid())
+  tokenHash  String
+  expiresAt  DateTime
+  attempts   Int       @default(0)
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+  userId     String
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
 model BlogPost {
   id          String         @id @default(cuid())
   title       String
   slug        String         @unique
   excerpt     String
   content     String
+  tags        String[]       @default([])
   status      BlogPostStatus @default(DRAFT)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt

@@ -11,7 +11,7 @@ RUN bun install
 
 # Copy the rest of the app files and build
 COPY . .
-RUN bun run build
+RUN bun run db:generate && bun run build
 
 # Production stage
 FROM oven/bun:latest AS runner

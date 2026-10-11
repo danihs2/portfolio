@@ -136,12 +136,23 @@ exports.Prisma.AdminSessionScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
 exports.Prisma.BlogPostScalarFieldEnum = {
   id: 'id',
   title: 'title',
   slug: 'slug',
   excerpt: 'excerpt',
   content: 'content',
+  tags: 'tags',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -184,6 +195,7 @@ exports.BlogPostStatus = exports.$Enums.BlogPostStatus = {
 exports.Prisma.ModelName = {
   AdminUser: 'AdminUser',
   AdminSession: 'AdminSession',
+  PasswordResetToken: 'PasswordResetToken',
   BlogPost: 'BlogPost',
   ContactSubmission: 'ContactSubmission'
 };

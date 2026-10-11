@@ -18,16 +18,7 @@ function getSmtpConfig() {
   return { host, port, user, pass, from, to };
 }
 
-export async function sendContactNotificationEmail(payload: {
-  name: string;
-  email: string;
-  country: string;
-  phone?: string;
-  businessInquiry: string;
-  projectDetails: string;
-  expectedStartDate?: string;
-  expectedEndDate?: string;
-}) {
+function createSmtpTransport() {
   const config = getSmtpConfig();
   const transporter = nodemailer.createTransport({
     host: config.host,
@@ -38,6 +29,21 @@ export async function sendContactNotificationEmail(payload: {
       pass: config.pass,
     },
   });
+
+  return { config, transporter };
+}
+
+export async function sendContactNotificationEmail(payload: {
+  name: string;
+  email: string;
+  country: string;
+  phone?: string;
+  businessInquiry: string;
+  projectDetails: string;
+  expectedStartDate?: string;
+  expectedEndDate?: string;
+}) {
+  const { config, transporter } = createSmtpTransport();
 
   await transporter.sendMail({
     from: config.from,
@@ -53,6 +59,22 @@ export async function sendContactNotificationEmail(payload: {
       `Project details: ${payload.projectDetails}`,
       `Expected start date: ${payload.expectedStartDate || "Not provided"}`,
       `Expected end date: ${payload.expectedEndDate || "Not provided"}`,
+    ].join("\n"),
+  });
+}
+
+export async function sendPasswordResetEmail(email: string, code: string) {
+  const { config, transporter } = createSmtpTransport();
+
+  await transporter.sendMail({
+    from: config.from,
+    to: email,
+    subject: "Your portfolio password reset code",
+    text: [
+      `Your password reset code is: ${code}`,
+      "",
+      "This code expires in 5 minutes and can only be used once.",
+      "If you did not request this change, you can ignore this email.",
     ].join("\n"),
   });
 }

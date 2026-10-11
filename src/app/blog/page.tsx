@@ -64,6 +64,7 @@ async function getPublishedPosts() {
       title: true,
       slug: true,
       excerpt: true,
+      tags: true,
       publishedAt: true,
       updatedAt: true,
     },
@@ -100,6 +101,7 @@ export default async function BlogPage() {
           "@type": "BlogPosting",
           headline: post.title,
           description: post.excerpt,
+          keywords: post.tags,
           datePublished: post.publishedAt?.toISOString() ?? post.updatedAt.toISOString(),
           author: {
             "@type": "Person",
@@ -169,6 +171,18 @@ export default async function BlogPage() {
                   </Link>
                 </h2>
                 <p className="font-medium leading-relaxed">{post.excerpt}</p>
+                {post.tags.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="retro-badge text-[10px] sm:text-xs"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <Link
                   href={`/blog/${post.slug}`}
                   className="inline-flex border-4 border-black bg-primary px-4 py-2 text-sm font-black uppercase text-primary-foreground shadow-retro-sm transition hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
